@@ -1,7 +1,9 @@
 # coding:utf-8
 from flask import Blueprint
 
-auth = Blueprint('scdMain', __name__)
+scdMain = Blueprint('scdMain', __name__)
+
+from app.scdMain import views
 
 from . import errors, forms
 # 由于路由和错误处理页面定义在这个文件里面，导入到蓝本把他们关联起来
