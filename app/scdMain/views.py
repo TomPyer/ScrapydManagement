@@ -5,6 +5,8 @@ from app.models import User, SpiderLog, db                      # 模板内容
 from utils.crypt import signature, des_encrypt, gen_md5_salt    # 加密函数
 from flask_login import login_required, logout_user             # 路由保护
 from .forms import LoginForm, RegisterForm
+from flask_mail import Message
+from app import mail
 
 import traceback
 
@@ -66,8 +68,28 @@ def log_the_user_in(user):
     return render_template('index.html')
 
 
-@scdMain.route('/hello', methods=['GET', 'POST'])
+@scdMain.route('/index', methods=['GET', 'POST'])
 @scdMain.route('/', methods=['GET', 'POST'])
-@login_required
-def hello():
-    return render_template('base.html')
+# @login_required
+def index():
+    return render_template('index.html')
+
+
+@scdMain.route('/contact', methods=['GET'])
+def contact():
+    form = LoginForm()
+    return render_template('contact.html', form=form)
+
+
+@scdMain.route('/work', methods=['GET'])
+def work():
+    return render_template('work.html')
+
+
+@scdMain.route('/message', methods=['POST'])
+def message():
+    # 网页信息发送至开发者邮箱
+    msg = Message(request.form.msg_body, sender='271348762@qq.com', recipients='zenmeshenmedoubang@qq.com')
+    msg.body = request.form.msg_body
+    mail.send(msg)
+
