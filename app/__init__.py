@@ -1,15 +1,19 @@
 #! coding:utf-8
-from flask import Flask, render_template
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from config import config
 
 bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
+login_manager = LoginManager()
+login_manager.session_protection = 'strong'  # None/basic/strong 代表不同的安全等级
+login_manager.login_view = 'scdMain.login'   # 定义login view,在login_required装饰器中用到
 
 
 def app_create(config_name):
@@ -22,9 +26,10 @@ def app_create(config_name):
     mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)
+    login_manager.init_app(app)
     # 路由和其他处理程序定义
     # ...
     from app.scdMain import scdMain as scd_blueprint
-    app.register_blueprint(scd_blueprint, url_prefix='/scd')
+    app.register_blueprint(scd_blueprint, url_prefix='/scdMain')
 
     return app
