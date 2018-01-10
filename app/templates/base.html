@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ScrapydManagement</title>
-</head>
-<body>
-{% block title %}
-{% endblock title%}
+{% extends "bootstrap/base.html" %}
+{% block title %} ScrapydManagement - Login {% endblock %}
+
 {% block content %}
 {% endblock content %}
+<h1>base page !!</h1>
 <div>
     <ul class="nav navbar-nav  navbar-right">
         {% if current_user.is_authenticated %}
@@ -18,5 +13,3 @@
         {% endif %}
     </ul>
 </div>
-</body>
-</html>

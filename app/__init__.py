@@ -20,6 +20,7 @@ def app_create(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])  # 可以直接把对象里面的配置数据转换到app.config里面
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # 该参数默认为None并会弹出警告
+    app.config['BOOTSTRAP_SERVE_LOCAL'] = True          # 启用本地cdn
     config[config_name].init_app(app)
 
     bootstrap.init_app(app)
