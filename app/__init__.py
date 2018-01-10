@@ -21,6 +21,13 @@ def app_create(config_name):
     app.config.from_object(config[config_name])  # 可以直接把对象里面的配置数据转换到app.config里面
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # 该参数默认为None并会弹出警告
     app.config['BOOTSTRAP_SERVE_LOCAL'] = True          # 启用本地cdn
+    app.config.update(MAIL_SERVER='smtp.qq.com',
+                    MAIL_PROT=25,
+                    MAIL_USE_TLS=True,
+                    MAIL_USE_SSL=False,
+                    MAIL_USERNAME="",
+                    MAIL_PASSWORD="",
+                    MAIL_DEBUG=True)
     config[config_name].init_app(app)
 
     bootstrap.init_app(app)
