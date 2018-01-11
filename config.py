@@ -26,6 +26,17 @@ class DevelopmentConfig(Config):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
                               'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+    # scrapyd相关API
+    SCRAPYD_URL = 'http://127.0.0.1:6800/'
+    GET_PROJECTS_URL = 'http://192.168.0.2:6800/listprojects.json'
+    GET_SPIDERS_URL = 'http://192.168.0.2:6800/listspiders.json'
+    GET_SPIDER_BAT_URL = 'http://192.168.0.2:6800/listversions.json'
+    GET_PROJECT_TASK = 'http://192.168.0.2:6800/listjobs.json'
+    GET_PROJECT_JOBS_INFO = 'http://127.0.0.1:6800/listjobs.json'
+    DEL_PROJECT_URL = 'http://192.168.0.2:6800/delproject.json'
+    DEL_PROJECT_VER_URL = 'http://192.168.0.2:6800/delversion.json'
+    STOP_SPIDER_URL = 'http://192.168.0.2:6800/cancel.json'
+    START_SPIDER_URL = 'http://192.168.0.2:6800/schedule.json'
 
 
 class TestingConfig(Config):
