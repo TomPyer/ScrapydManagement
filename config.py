@@ -38,6 +38,10 @@ class DevelopmentConfig(Config):
     STOP_SPIDER_URL = 'http://192.168.0.2:6800/cancel.json'
     START_SPIDER_URL = 'http://192.168.0.2:6800/schedule.json'
 
+    # redis配置
+    REDIS_HOST = '127.0.0.1'
+    REDIS_POST = '6379'
+
 
 class TestingConfig(Config):
     # 测试环境
