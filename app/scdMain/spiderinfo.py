@@ -1,10 +1,11 @@
 #! coding:utf-8
-
-import urllib.request
-import urllib.parse
+"""
+Spider操作相关类
+"""
 
 from flask import current_app               # 配置项获取
 from utils.urllibfunc import get_url_act, post_url_act      # 获取request相关方法
+from utils.SchedUtils import SchedulerUtils                 # 获取Scheduler相关方法
 
 
 class SpiderInfo(object):
@@ -74,3 +75,5 @@ class SpiderTask(object):
     def create_task(project_name, spider):
         # 创建任务(定时启动或关闭)
         pass
+
+

@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for   # 基础内容
 from app.models import User, SpiderLog, db                      # 模板内容
 from utils.crypt import signature, des_encrypt, gen_md5_salt    # 加密函数
 from flask_login import login_required, logout_user             # 路由保护
-from .forms import LoginForm, RegisterForm
+from app.scdMain.forms import LoginForm, RegisterForm
 from flask_mail import Message
 from app import mail
 
@@ -13,6 +13,7 @@ import traceback
 
 @scdMain.route('/register', methods=['GET', 'POST'])
 def register():
+    # 注册
     if request.method == 'POST':
         try:
             token = gen_md5_salt()
@@ -32,6 +33,7 @@ def register():
 
 @scdMain.route('/login', methods=['POST', 'GET'])
 def login():
+    # 登录
     error = None
     form = LoginForm()
     if request.method == 'POST':
@@ -46,6 +48,7 @@ def login():
 @scdMain.route('/logout')
 @login_required
 def logout():
+    # 登出
     logout_user()
     return redirect(url_for('/login'))
 
@@ -65,6 +68,7 @@ def valid_login(email, pwd):
 
 
 def log_the_user_in(user):
+    # 登录后的操作, 登录系统暂时不完整, 以后再写
     return render_template('index.html')
 
 
@@ -72,16 +76,19 @@ def log_the_user_in(user):
 @scdMain.route('/', methods=['GET', 'POST'])
 # @login_required
 def index():
+    # 首页
     return render_template('index.html')
 
 
 @scdMain.route('/contact', methods=['GET'])
 def contact():
+    # 登录/注册页面
     return render_template('contact.html')
 
 
 @scdMain.route('/work', methods=['GET'])
 def work():
+    # 工作页面
     return render_template('work.html')
 
 
@@ -92,3 +99,4 @@ def message():
     msg.body = request.form['msg_body']
     mail.send(msg)
     return render_template('contact.html')
+
