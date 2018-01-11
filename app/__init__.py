@@ -25,8 +25,8 @@ def app_create(config_name):
                     MAIL_PROT=25,
                     MAIL_USE_TLS=True,
                     MAIL_USE_SSL=False,
-                    MAIL_USERNAME="",
-                    MAIL_PASSWORD="",
+                    MAIL_USERNAME="271348762@qq.com",
+                    MAIL_PASSWORD="byytrmvwmtwzbhgh",
                     MAIL_DEBUG=True)
     config[config_name].init_app(app)
 

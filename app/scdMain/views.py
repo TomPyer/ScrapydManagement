@@ -77,8 +77,7 @@ def index():
 
 @scdMain.route('/contact', methods=['GET'])
 def contact():
-    form = LoginForm()
-    return render_template('contact.html', form=form)
+    return render_template('contact.html')
 
 
 @scdMain.route('/work', methods=['GET'])
@@ -89,7 +88,7 @@ def work():
 @scdMain.route('/message', methods=['POST'])
 def message():
     # 网页信息发送至开发者邮箱
-    msg = Message(request.form.msg_body, sender='271348762@qq.com', recipients='zenmeshenmedoubang@qq.com')
-    msg.body = request.form.msg_body
+    msg = Message(request.form['msg_body'], sender='271348762@qq.com', recipients=['zenmeshenmedoubang@qq.com'])
+    msg.body = request.form['msg_body']
     mail.send(msg)
-
+    return render_template('contact.html')
