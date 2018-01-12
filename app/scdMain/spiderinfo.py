@@ -7,6 +7,10 @@ from flask import current_app               # 配置项获取
 from utils.urllibfunc import get_url_act, post_url_act      # 获取request相关方法
 from utils.SchedUtils import SchedulerUtils                 # 获取Scheduler相关方法
 
+import uuid
+import traceback
+import time
+
 
 class SpiderInfo(object):
     """
@@ -55,25 +59,49 @@ class SpiderTask(object):
     爬虫工作相关,新建任务,关闭任务
     """
     def __init__(self):
-        pass
+        self.sche = SchedulerUtils()
 
     @staticmethod
     def start_spider(project_name, spider_name):
-        # 开始任务
+        """
+        开始任务
+        :param project_name:    项目名称
+        :param spider_name:     爬虫名称
+        :return:                True/False 是否执行成功
+        """
         resp = post_url_act(url=current_app.config['START_SPIDER_URL'],
                             data={'project': project_name, 'spider': spider_name})
-        return resp
+        return (True, resp['jobid']) if resp['status'] == 'ok' else (False, resp['msg'])
 
     @staticmethod
     def stop_spider(project_name, spider_id):
-        # 结束任务
+        """
+         结束任务
+        :param project_name: 项目名称
+        :param spider_id:    爬虫名称
+        :return:             True/False
+        """
+
         resp = post_url_act(url=current_app.config['STOP_SPIDER_URL'],
                             data={'project': project_name, 'spider': spider_id})
-        return resp
+        return True if resp['status'] == 'ok' else False
 
-    @staticmethod
-    def create_task(project_name, spider):
-        # 创建任务(定时启动或关闭)
-        pass
-
-
+    def create_task(self, project, spider, state, trigger, **kwargs):
+        """
+        创建任务(定时启动或关闭)
+        :param project: 项目名称
+        :param spider:  爬虫名称
+        :param state:   操作状态
+        :param trigger: 调度类型
+        :return:        ok/no
+        """
+        task_id = uuid.uuid1()
+        try:
+            if state == 'open':
+                self.sche.create_task(self.start_spider(project, spider), task_id, trigger=trigger, **kwargs)
+            elif state == 'close':
+                self.sche.create_task(self.stop_spider(project, spider), task_id, trigger=trigger, **kwargs)
+            return True
+        except:
+            traceback.print_exc()
+            return False

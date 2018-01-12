@@ -74,7 +74,6 @@ def log_the_user_in(user):
 
 @scdMain.route('/index', methods=['GET', 'POST'])
 @scdMain.route('/', methods=['GET', 'POST'])
-# @login_required
 def index():
     # 首页
     return render_template('index.html')
@@ -99,4 +98,3 @@ def message():
     msg.body = request.form['msg_body']
     mail.send(msg)
     return render_template('contact.html')
-

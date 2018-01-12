@@ -19,6 +19,8 @@ login_manager.login_view = 'scdMain.login'   # 定义login view,在login_require
 def app_create(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])  # 可以直接把对象里面的配置数据转换到app.config里面
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@192.168.30.161:3306/test_db'  # mysql 配置
+    app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True      # 是否每次请求结束后自动提交数据库
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # 该参数默认为None并会弹出警告
     app.config['BOOTSTRAP_SERVE_LOCAL'] = True          # 启用本地cdn
     app.config.update(MAIL_SERVER='smtp.qq.com',
@@ -38,6 +40,8 @@ def app_create(config_name):
     # 路由和其他处理程序定义
     # ...
     from app.scdMain import scdMain as scd_blueprint
+    from app.spiMain import spiMain as spi_bluepring
     app.register_blueprint(scd_blueprint, url_prefix='/scdMain')
+    app.register_blueprint(spi_bluepring, url_prefix='/spiMain')
 
     return app

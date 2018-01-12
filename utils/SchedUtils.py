@@ -11,6 +11,8 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor  
 
 from flask import current_app
 
+from datetime import date
+
 
 class SchedulerUtils(object):
     """
@@ -40,32 +42,43 @@ class SchedulerUtils(object):
         sched = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults)
         return sched
 
-    def create_task(self, func, task_id, trigger, jobstore='redis', *args):
+    def create_task(self, func, task_id, trigger, jobstore='redis', **kwargs):
         """
         创建新任务
         :param func:    需要执行的具体函数
         :param task_id: 该次任务的ID
         :param trigger: 调度策略
         :param jobstore:任务存储器
-        :param args:    具体执行的时间(根据不同调度策略有不同的值)
+        :param kwargs:    具体执行的时间(根据不同调度策略有不同的值)
         :return:        None
         """
-        self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, replace_existing=True, *args)
+        if trigger == 'cron':
+            self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, start_date=kwargs['start_date'],
+                               end_date=kwargs['end_date'], year=kwargs['year'], month=kwargs['month'],
+                               day=kwargs['day'], hour=kwargs['hour'], minute=kwargs['minute'], second=0,
+                               replace_existing=True)
+        elif trigger == 'date':
+            self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, run_date=kwargs['run_date'],
+                               replace_existing=True)
+        elif trigger == 'interval':
+            self.sched.add_jbo(func, trigger, jobstore=jobstore, id=task_id, days=kwargs['days'], hours=kwargs['hours'],
+                               minutes=kwargs['minutes'], seconds=kwargs['seconds'])
         self.sched.start()
 
     def remove_task(self, task_id, jobstore='redis'):
         # 删除任务
         self.sched.remove_job(task_id, jobstore=jobstore)
 
-    def modify_task(self, task_id, trigger='cron', *args):
+    def modify_task(self, task_id, date_dic, trigger='cron', ):
         """
         修改任务
         :param task_id:  任务id
         :param trigger:  修改后的触发类型
-        :param args:     对应触发类型的参数
+        :param date_dic: 定时参数
         :return:         None
         """
-        self.sched.reschedule_job(task_id, trigger=trigger, *args)
+        self.sched.reschedule_job(task_id, trigger=trigger, start_data=date_dic['start_date'],
+                                  end_date=date_dic['end_date'], )
 
     def close_sched(self, wait):
         """
@@ -77,6 +90,24 @@ class SchedulerUtils(object):
 
     def get_tasks(self):
         return self.sched.get_jobs()
+
+    """ cron 定时调度 (某一定时刻执行)
+        ----(int|str) 表示参数既可以是int类型，也可以是str类型
+        ----(datetime | str) 表示参数既可以是datetime类型，也可以是str类型
+        year (int|str) – 4-digit year -（表示四位数的年份，如2008年）
+        month (int|str) – month (1-12) -（表示取值范围为1-12月）
+        day (int|str) – day of the (1-31) -（表示取值范围为1-31日）
+        week (int|str) – ISO week (1-53) -（格里历2006年12月31日可以写成2006年-W52-7（扩展形式）或2006W527（紧凑形式））
+        day_of_week (int|str) – number or name of weekday (0-6 or mon,tue,wed,thu,fri,sat,sun) - （表示一周中的第几天，既可以用0-6表示也可以用其英语缩写表示）
+        hour (int|str) – hour (0-23) - （表示取值范围为0-23时）
+        minute (int|str) – minute (0-59) - （表示取值范围为0-59分）
+        second (int|str) – second (0-59) - （表示取值范围为0-59秒）
+        start_date (datetime|str) – earliest possible date/time to trigger on (inclusive) - （表示开始时间）
+        end_date (datetime|str) – latest possible date/time to trigger on (inclusive) - （表示结束时间）
+        timezone (datetime.tzinfo|str) – time zone to use for the date/time calculations (defaults to scheduler timezone) -（表示时区取值）
+        ---表示2017年3月22日17时19分07秒执行该程序
+        scheduler.add_job(my_job, 'cron', year=2017,month = 03,day = 22,hour = 17,minute = 19,second = 07)
+    """
 
     """ interval 间隔调度  （任务会多次执行）
         weeks (int) – 某周
@@ -96,24 +127,6 @@ class SchedulerUtils(object):
         timezone (datetime.tzinfo|str) – time zone for run_date if it doesn’t have one already
         ---在指定的时间，只执行一次
         scheduler.add_job(tick, 'date', run_date='2018年1月11日 17:02:14')　
-    """
-
-    """ cron 定时调度 (某一定时刻执行)
-        ----(int|str) 表示参数既可以是int类型，也可以是str类型
-        ----(datetime | str) 表示参数既可以是datetime类型，也可以是str类型
-        year (int|str) – 4-digit year -（表示四位数的年份，如2008年）
-        month (int|str) – month (1-12) -（表示取值范围为1-12月）
-        day (int|str) – day of the (1-31) -（表示取值范围为1-31日）
-        week (int|str) – ISO week (1-53) -（格里历2006年12月31日可以写成2006年-W52-7（扩展形式）或2006W527（紧凑形式））
-        day_of_week (int|str) – number or name of weekday (0-6 or mon,tue,wed,thu,fri,sat,sun) - （表示一周中的第几天，既可以用0-6表示也可以用其英语缩写表示）
-        hour (int|str) – hour (0-23) - （表示取值范围为0-23时）
-        minute (int|str) – minute (0-59) - （表示取值范围为0-59分）
-        second (int|str) – second (0-59) - （表示取值范围为0-59秒）
-        start_date (datetime|str) – earliest possible date/time to trigger on (inclusive) - （表示开始时间）
-        end_date (datetime|str) – latest possible date/time to trigger on (inclusive) - （表示结束时间）
-        timezone (datetime.tzinfo|str) – time zone to use for the date/time calculations (defaults to scheduler timezone) -（表示时区取值）
-        ---表示2017年3月22日17时19分07秒执行该程序
-        scheduler.add_job(my_job, 'cron', year=2017,month = 03,day = 22,hour = 17,minute = 19,second = 07)
     """
 
 
