@@ -20,3 +20,8 @@ Scrapyd 自带的后台管理页面功能太简单，无法满足业务需求，
   4、新增APScheduler依赖, 用于完成任务调度   （调度器简介）[http://jinbitou.net/2016/12/19/2263.html]<br>
   5、新增redis依赖, 用作APScheduler JobStore.<br>
   6、完成SchedUtilis模块基本功能
+
+### 2018-1-12
+  1、新增pymysql依赖,mysql作为项目主要数据库, redis仅保存任务信息<br>
+  2、新增spiMain路由,spider相关操作转移到该路由下<br>
+  3、增加apsched调度页面模板和flash消息模板<br>

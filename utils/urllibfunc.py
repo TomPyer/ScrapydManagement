@@ -11,6 +11,9 @@ def get_url_act(url):
 
 
 def post_url_act(url, data):
-    data = parse.urlencode(data)
-    req = request.Request(url, data=data)
-    return eval(request.urlopen(req).read())
+    arg_list = []
+    for k, v in data.items():
+        arg_list.append('='.join([k, v]))
+    args = '&'.join(arg_list)
+    url = '?'.join([url, args])
+    return eval(request.urlopen(url).read())
