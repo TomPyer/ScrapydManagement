@@ -100,73 +100,75 @@
                   </div>
                   <div class="portfolio-contant">
                     <ul id="portfolio-contant-active">
+                      {% for project, spider in project_dic.items() %}
                         <li class="mix Branding">
                           <a href="#">
                             <img src="../static/img/portfolio/work1.jpg" alt="">
                             <div class="overly">
                               <div class="position-center">
-                                <h2>爬虫项目1</h2>
-                                <p>爬虫项目1介绍 </p>
+                                <h2>{{ project }}</h2>
+                                <p>{{ spider }}</p>
                               </div>
                             </div>
                           </a>
                       </li>
-                      <li class="mix Websites">
-                        <a href="#">
-                          <img src="../static/img/portfolio/work2.jpg" alt="">
-                          <div class="overly">
-                            <div class="position-center">
-                              <h2>爬虫项目2</h2>
-                                <p>爬虫项目2介绍 </p>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="mix Graphic">
-                        <a href="#">
-                          <img src="../static/img/portfolio/work3.jpg" alt="">
-                          <div class="overly">
-                            <div class="position-center">
-                              <h2>爬虫项目3</h2>
-                                <p>爬虫项目3介绍 </p>
-                            </div>
-                          </div>
-                          
-                        </a>
-                      </li>
-                      <li class="mix design">
-                        <a href="#">
-                          <img src="../static/img/portfolio/work4.jpg" alt="">
-                          <div class="overly">
-                            <div class="position-center">
-                              <h2>爬虫项目4</h2>
-                                <p>爬虫项目4介绍 </p>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="mix Video">
-                        <a href="#">
-                          <img src="../static/img/portfolio/work5.jpg" alt="">
-                          <div class="overly">
-                            <div class="position-center">
-                              <h2>爬虫项目5</h2>
-                                <p>爬虫项目5介绍 </p>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="mix Graphic">
-                        <a href="#">
-                          <img src="../static/img/portfolio/work6.jpg" alt="">
-                          <div class="overly">
-                            <div class="position-center">
-                              <h2>爬虫项目6</h2>
-                                <p>爬虫项目6介绍 </p>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
+                      {% endfor %}
+                      <!--<li class="mix Websites">-->
+                        <!--<a href="#">-->
+                          <!--<img src="../static/img/portfolio/work2.jpg" alt="">-->
+                          <!--<div class="overly">-->
+                            <!--<div class="position-center">-->
+                              <!--<h2>爬虫项目2</h2>-->
+                                <!--<p>爬虫项目2介绍 </p>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</a>-->
+                      <!--</li>-->
+                      <!--<li class="mix Graphic">-->
+                        <!--<a href="#">-->
+                          <!--<img src="../static/img/portfolio/work3.jpg" alt="">-->
+                          <!--<div class="overly">-->
+                            <!--<div class="position-center">-->
+                              <!--<h2>爬虫项目3</h2>-->
+                                <!--<p>爬虫项目3介绍 </p>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                          <!---->
+                        <!--</a>-->
+                      <!--</li>-->
+                      <!--<li class="mix design">-->
+                        <!--<a href="#">-->
+                          <!--<img src="../static/img/portfolio/work4.jpg" alt="">-->
+                          <!--<div class="overly">-->
+                            <!--<div class="position-center">-->
+                              <!--<h2>爬虫项目4</h2>-->
+                                <!--<p>爬虫项目4介绍 </p>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</a>-->
+                      <!--</li>-->
+                      <!--<li class="mix Video">-->
+                        <!--<a href="#">-->
+                          <!--<img src="../static/img/portfolio/work5.jpg" alt="">-->
+                          <!--<div class="overly">-->
+                            <!--<div class="position-center">-->
+                              <!--<h2>爬虫项目5</h2>-->
+                                <!--<p>爬虫项目5介绍 </p>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</a>-->
+                      <!--</li>-->
+                      <!--<li class="mix Graphic">-->
+                        <!--<a href="#">-->
+                          <!--<img src="../static/img/portfolio/work6.jpg" alt="">-->
+                          <!--<div class="overly">-->
+                            <!--<div class="position-center">-->
+                              <!--<h2>爬虫项目6</h2>-->
+                                <!--<p>爬虫项目6介绍 </p>-->
+                            <!--</div>-->
+                          <!--</div>-->
+                        <!--</a>-->
+                      <!--</li>-->
                     </ul>
                   </div>
                 </div>

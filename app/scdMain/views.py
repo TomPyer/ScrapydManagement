@@ -9,6 +9,7 @@ from flask_mail import Message
 from app import mail
 
 import traceback
+from .spiderinfo import SpiderInfo
 
 
 @scdMain.route('/register', methods=['GET', 'POST'])
@@ -87,8 +88,16 @@ def contact():
 
 @scdMain.route('/work', methods=['GET'])
 def work():
-    # 工作页面
-    return render_template('work.html')
+    """
+    工作首页
+    需要展示所有项目概览图和名称
+    """
+    spi_obj = SpiderInfo()
+    project_info = spi_obj.get_scrapy_project_info()
+    project_count = spi_obj.projects_count
+    project_spider_count = spi_obj.spiders_count
+    return render_template('work.html', project_dic=project_info, project_count=project_count,
+                           project_spider_count=project_spider_count)
 
 
 @scdMain.route('/message', methods=['POST'])
@@ -98,3 +107,8 @@ def message():
     msg.body = request.form['msg_body']
     mail.send(msg)
     return render_template('contact.html')
+
+
+@scdMain.route('/apsched', methods=['GET'])
+def apsched():
+    return render_template('apsched.html')
