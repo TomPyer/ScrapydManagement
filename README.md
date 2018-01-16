@@ -25,3 +25,9 @@ Scrapyd 自带的后台管理页面功能太简单，无法满足业务需求，
   1、新增pymysql依赖,mysql作为项目主要数据库, redis仅保存任务信息<br>
   2、新增spiMain路由,spider相关操作转移到该路由下<br>
   3、增加apsched调度页面模板和flash消息模板<br>
+  
+### 2018-1-16
+  1、新增apsched页面模板
+  2、着手添加flash消息支持
+  3、完善任务调度相关api
+  

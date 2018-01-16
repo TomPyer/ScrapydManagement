@@ -1,6 +1,6 @@
 #! coding:utf-8
 from app.scdMain import scdMain                                 # 自定义app
-from flask import render_template, request, redirect, url_for   # 基础内容
+from flask import render_template, request, redirect, url_for, flash   # 基础内容
 from app.models import User, SpiderLog, db                      # 模板内容
 from utils.crypt import signature, des_encrypt, gen_md5_salt    # 加密函数
 from flask_login import login_required, logout_user             # 路由保护
@@ -112,3 +112,9 @@ def message():
 @scdMain.route('/apsched', methods=['GET'])
 def apsched():
     return render_template('apsched.html')
+
+
+@scdMain.route('/fla', methods=['GET'])
+def fla():
+    flash('lalalalalalaal', 'warning')
+    return render_template('flash.html')
