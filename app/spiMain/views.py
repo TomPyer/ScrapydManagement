@@ -40,16 +40,26 @@ def cre_task():
 @spiMain.route('/start_task', methods=['GET'])
 def start_task():
     # 开始任务
-    pass
+    stask_obj = SpiderTask()
+    flag, ret = stask_obj.start_spider(request.args.get('project'), request.args.get('spider'))
+    if not flag:
+        flash(ret)
+    return redirect(url_for('scdMain/work'))
 
 
 @spiMain.route('/stop_task', methods=['GET'])
 def stop_task():
     # 结束任务
-    pass
+    stask_obj = SpiderTask()
+    flag = stask_obj.stop_spider(request.args.get('project'), request.args.get('spider'))
+    if not flag:
+        flash('结束任务失败!请检查任务是否允许!')
+    return redirect(url_for('scdMain/work'))
 
 
 @spiMain.route('/view_task', methods=['GET'])
 def view_task():
     # 查看任务
-    pass
+    spider_obj = SpiderInfo()
+    run_info = spider_obj.get_spider_info(request.args.get('project'), request.args.get('spider_run_id'))
+    return render_template('work.html', runInfo=run_info)
