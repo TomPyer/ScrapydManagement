@@ -1,0 +1,69 @@
+{% extends "apsched.html" %}
+{% block apsched_form %}
+<section>
+    <div class="col-lg-7" style="padding-top: 50px; border: 1px;">
+        <div class="pull-right">
+            <!--<button class="btn btn-primary ">删除项目</button>-->
+            <!--<button href="/scdMain/create_project" class="btn btn-primary " data-toggle="modal" data-target="#myModal">创建爬虫</button>-->
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                  <th>爬虫名称</th>
+                  <th>所属项目</th>
+                  <th>job</th>
+                  <th>pid</th>
+                  <th>开始时间</th>
+                  <th>运行时间</th>
+                  <th>结束时间</th>
+                  <th>日志查看</th>
+                </tr>
+              </thead>
+            <tbody>
+            {% for data in re_list %}
+                <tr>
+                    <td>{{data['spider']}}</td>
+                    <td>{{data['project']}}</td>
+                    <td>{{data['job']}}</td>
+                    <td>{{data['pid']}}</td>
+                    <td>{{data['start']}}</td>
+                    <td>{{data['runtime']}}</td>
+                    <td>{{data['finish']}}</td>
+                    <td>{{data['log']}}</td>
+                </tr>
+            {% endfor%}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-1"></div>
+    <!--<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+        <!--<div class="modal-dialog">-->
+            <!--<div class="modal-content">-->
+                <!--<div class="modal-header">-->
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
+                        <!--&times;-->
+                    <!--</button>-->
+                    <!--<h4 class="modal-title" id="myModalLabel">-->
+                        <!--创 建 项 目-->
+                    <!--</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body">-->
+                    <!--<tr>-->
+                        <!--<td>爬虫名称: <input class="form-control"></td>-->
+                        <!--<td>所属项目: <input class="form-control"></td>-->
+                        <!--<td>创建人: <input class="form-control"></td>-->
+                        <!--<td>创建时间: <input class="form-control"></td>-->
+                    <!--</tr>-->
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">关闭-->
+                    <!--</button>-->
+                    <!--<button type="button" class="btn btn-primary">-->
+                        <!--提交-->
+                    <!--</button>-->
+                <!--</div>-->
+            <!--</div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+        <!--</div>&lt;!&ndash; /.modal &ndash;&gt;-->
+    <!--</div>-->
+</section>
+{% endblock %}

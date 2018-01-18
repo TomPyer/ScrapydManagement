@@ -55,10 +55,10 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul class="nav navbar-nav navbar-right">
-                    <li><a href="index"><b>首 页</b></a></li>
-                    <li><a href="work"><b>工 作</b></a></li>
-                    <li><a href="contact"><b>登录/注册</b></a></li>
-                    <li><a href="apsched"><b>施工建设中</b></a></li>
+                    <li><a href="/scdMain/index"><b>首 页</b></a></li>
+                    <li><a href="/scdMain/work"><b>工 作</b></a></li>
+                    <li><a href="/scdMain/contact"><b>登录/注册</b></a></li>
+                    <li><a href="/scdMain/apsched"><b>施工建设中</b></a></li>
                     <li><a href="#"><b>施工建设中</b></a></li>
                   </ul>
                 </div><!-- /.navbar-collapse -->
@@ -84,7 +84,7 @@
         <!--</section>-->
         <!-- contact form start -->
     </section>
-    <section id="work-table" style="height:680px; padding-top: 70px">
+    <section id="work-table" style="padding-top: 70px">
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="col-lg-1"></div>
@@ -97,50 +97,57 @@
                             <a href="/spiMain/project_base">所有项目</a>
                         </li>
                         <li>
-                            <a href="#">所有爬虫</a>
+                            <a href="/spiMain/spider_base">所有爬虫</a>
                         </li>
                         <li>
-                            <a href="#">运行中爬虫</a>
+                            <a href="/spiMain/spider_run_base">运行中爬虫</a>
                         </li>
                         <li>
-                            <a href="#">已完成任务</a>
+                            <a href="/spiMain/suc_task">已完成任务</a>
                         </li>
                         <li class="nav-header">
                             <h3><b>定 时 计 划</b></h3>
                         </li>
                         <li>
-                            <a href="#">所有定时计划</a>
+                            <a href="/taskMain/all_task">所有定时计划</a>
                         </li>
                         <li>
-                            <a href="#">当前有效计划</a>
-                        </li>
-                        <li class="divider">
+                            <a href="/taskMain/effe_task">当前有效计划</a>
                         </li>
                         <li>
-                            <a href="#">已停止计划</a>
+                            <a href="/taskMain/stoped_task">已停止计划</a>
                         </li>
                     </ul>
                     <div class="accordion" id="accordion-776774">
                         <div class="accordion-group">
                             <div class="accordion-heading">
-                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-776774" href="#accordion-element-508790"><h3>服 务 器</h3></a>
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-776774" href="#accordion-element-508790"><h3 style="color: #000000;">服 务 器</h3></a>
                             </div>
                             <div id="accordion-element-508790" class="accordion-body collapse">
-                                <div class="accordion-inner">
-                                    <a href="#">运行状态</a>
+                                <div class="accordion-inner" style="padding-top: 15px; padding-left: 15px;">
+                                    <a href="/serverMain/run_status">运行状态</a>
                                 </div>
-                                <div class="accordion-inner">
-                                    <a href="#">日志状态</a>
+                                <div class="accordion-inner" style="padding-top: 15px; padding-left: 15px;">
+                                    <a href="/serverMain/log_status">日志状态</a>
+                                </div>
+                                <div class="accordion-inner" style="padding-top: 15px; padding-left: 15px;">
+                                    <a href="/serverMain/memory">内存使用</a>
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-group">
                             <div class="accordion-heading">
-                                 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-776774" href="#accordion-element-32183"><h3>数 据 库</h3></a>
+                                 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-776774" href="#accordion-element-32183"><h3 style="color: #000000;">数 据 库</h3></a>
                             </div>
                             <div id="accordion-element-32183" class="accordion-body collapse">
-                                <div class="accordion-inner">
-                                    功能块...
+                                <div class="accordion-inner" style="padding-top: 15px; padding-left: 15px;">
+                                    <a href="/databaseMain/table">表查看</a>
+                                </div>
+                                <div class="accordion-inner" style="padding-top: 15px; padding-left: 15px;">
+                                    <a href="/databaseMain/table_data">表数据情况</a>
+                                </div>
+                                <div class="accordion-inner" style="padding-top: 15px; padding-bottom: 25px; padding-left: 15px;">
+                                    <a href="/databaseMain/run_status">运行状况</a>
                                 </div>
                             </div>
                         </div>
