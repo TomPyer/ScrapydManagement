@@ -40,8 +40,14 @@ def app_create(config_name):
     # 路由和其他处理程序定义
     # ...
     from app.scdMain import scdMain as scd_blueprint
-    from app.spiMain import spiMain as spi_bluepring
+    from app.spiMain import spiMain as spi_blueprint
+    from app.taskMain import taskMain as task_blueprint
+    from app.databaseMain import databaseMain as db_blueprint
+    from app.serverMain import serverMain as server_blueprint
     app.register_blueprint(scd_blueprint, url_prefix='/scdMain')
-    app.register_blueprint(spi_bluepring, url_prefix='/spiMain')
+    app.register_blueprint(spi_blueprint, url_prefix='/spiMain')
+    app.register_blueprint(db_blueprint, url_prefix='/databaseMain')
+    app.register_blueprint(server_blueprint, url_prefix='/serverMain')
+    app.register_blueprint(task_blueprint, url_prefix='/taskMain')
 
     return app
