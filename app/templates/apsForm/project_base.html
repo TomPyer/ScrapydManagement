@@ -4,7 +4,7 @@
     <div class="col-lg-7" style="padding-top: 50px; border: 1px;">
         <div class="pull-right">
             <!--<button class="btn btn-primary ">删除项目</button>-->
-            <button href="/scdMain/create_project" class="btn btn-primary " data-toggle="modal" data-target="#myModal">创建项目</button>
+            <button class="btn btn-primary " data-toggle="modal" data-target="#myModal">创建项目</button>
         </div>
         <table class="table table-hover">
             <thead>
@@ -44,19 +44,21 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="conent" class="col-sm-2 control-label">项目名称: </label>
+                            <label for="name" class="col-sm-2 control-label">项目名称: </label>
                             <div class="col-sm-9">
-                                <input type="text" id="conent" name="conent" class="form-control well" placeholder="请输入项目名称"/>
+                                <input type="text" id="name" name="name" class="form-control well" placeholder="请输入项目名称"/>
                             </div>
-                        </div><div class="form-group">
-                            <label for="present" class="col-sm-2 control-label">创建人: </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="version" class="col-sm-2 control-label">版本号: </label>
                             <div class="col-sm-9">
-                                <input type="text" id="present" name="present" class="form-control well" placeholder="请输入创建人"/>
+                                <input type="text" id="version" name="version" class="form-control well" placeholder="请输入版本号"/>
                             </div>
-                        </div><div class="form-group">
-                            <label for="date" class="col-sm-2 control-label">创建时间: </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="introduce" class="col-sm-2 control-label">项目简介: </label>
                             <div class="col-sm-9">
-                                <input type="text" id="date" name="date" class="form-control well" placeholder="请输入创建时间"/>
+                                <input type="text" id="introduce" name="introduce" class="form-control well" placeholder="请输入项目简介"/>
                             </div>
                         </div>
                     </div>
@@ -71,5 +73,6 @@
             </div><!-- /.modal -->
         </div>
     </form>
+
 </section>
 {% endblock %}
