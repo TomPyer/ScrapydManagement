@@ -4,8 +4,10 @@ Spider操作相关类
 """
 
 from flask import current_app               # 配置项获取
-from utils.urllibfunc import get_url_act, post_url_act      # 获取request相关方法
+from utils.urllibfunc import get_url_act, post_url_act, get_url_html      # 获取request相关方法
 from utils.SchedUtils import SchedulerUtils                 # 获取Scheduler相关方法
+
+from lxml import etree
 
 import uuid
 import traceback
@@ -33,13 +35,13 @@ class SpiderInfo(object):
 
     def get_jbos_info(self, project_name):
         # 获取工程信息, 项目下所有的爬虫作业信息
-        url = '?'.join([current_app.config['GET_PROJECT_JOBS_INFO'], 'project=', project_name])
+        url = '?'.join([current_app.config['GET_PROJECT_JOBS_INFO'], 'project=%s' % project_name])
         resp = get_url_act(url)
-        rfp_lis = resp['running'] + resp['finished'] + resp['pending']      # 三种状态的爬虫信息
-        self.running_count = len(resp['running'])
-        self.stop_count = len(resp['finished'])
-        self.pending = len(resp['finished'])
-        return rfp_lis
+        # rfp_lis = resp['running'] + resp['finished'] + resp['pending']      # 三种状态的爬虫信息
+        # self.running_count = len(resp['running'])
+        # self.stop_count = len(resp['finished'])
+        # self.pending = len(resp['finished'])
+        return resp
 
     def get_scrapy_project_info(self):
         # 获取项目信息
@@ -53,6 +55,11 @@ class SpiderInfo(object):
             project_dic[project_name] = resp['spiders']
             self.spiders_count += len(resp['spiders'])
         return project_dic
+
+    def get_job(self):
+        url = current_app.config['GET_JOB_URL']
+        resp = etree.HTML(get_url_html(url).lower().decode('utf-8'))
+        return resp
 
 
 class SpiderTask(object):
