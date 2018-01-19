@@ -1,14 +1,17 @@
 #! coding:utf-8
 from app.scdMain import scdMain                                 # 自定义app
-from flask import render_template, request, redirect, url_for, flash   # 基础内容
+from flask import render_template, request, redirect, url_for, flash, current_app   # 基础内容
 from app.models import User, SpiderLog, db                      # 模板内容
 from utils.crypt import signature, des_encrypt, gen_md5_salt    # 加密函数
 from flask_login import login_required, logout_user             # 路由保护
 from app.scdMain.forms import LoginForm, RegisterForm
 from flask_mail import Message
-from app import mail
+from app.models import ScrapyProject, SpiderInfoDB, SpiderLog, OperaLog
+from app import mail, db
 
 import traceback
+import subprocess
+import datetime
 from .spiderinfo import SpiderInfo
 
 
@@ -118,3 +121,55 @@ def apsched():
 def fla():
     flash('lalalalalalaal', 'warning')
     return render_template('flash.html')
+
+
+@scdMain.route('/create_project', methods=['POST'])
+def create_prject():
+    # 创建项目
+    if request.method == 'POST':
+        try:
+            # subprocess.Popen(['scrapy', 'startproject', request.form['name']], cwd=current_app.config['SCRAPYPWD'], stdout=subprocess.PIPE)
+            # id = db.Column(db.Integer, primary_key=True)
+            # name = db.Column(db.String(20), index=True)
+            # spider_count = db.Column(db.Integer)  # 该项目下爬虫总数
+            # introduce = db.Column(db.Text)  # 项目简介
+            # create_time = db.Column(db.DateTime)
+            # node_name = db.Column(db.String(30))
+            # version = db.Column(db.String(20))
+            project_info = ScrapyProject(name=request.form['name'], spider_count=0, introduce=request.form['introduce'],
+                                         create_time=datetime.datetime.now(), node_name='', version=request.form['version'])
+            opara_log = OperaLog(operation='create_project', person='txl', create_time=datetime.datetime.now())
+            db.session.add(opara_log)
+            db.session.add(project_info)
+            db.session.commit()
+        except KeyError as e:
+            flash('请填写完整信息..')
+        return redirect(url_for('spiMain.project_base'))
+
+
+@scdMain.route('/create_spider', methods=['POST'])
+def create_spider():
+    # 创建爬虫
+    try:
+        # name = db.Column(db.String(20), index=True)
+        # sp_url = db.Column(db.String(120))  # 该爬虫的url
+        # run_count = db.Column(db.Integer)  # 工作次数
+        # item_count = db.Column(db.Integer)  # 爬取的item数量
+        # url_count = db.Column(db.Integer)  # 爬取的页面数量
+        # introduce = db.Column(db.Text)  # 爬虫简介
+        # project = db.Column(db.Integer)  # 所属项目组ID
+        # create_time = db.Column(db.DateTime)
+        # subprocess.Popen(['scrapy', 'genspider', request.form['name'], request.form['website']],
+        #                  cwd='D:\work\scrapyPython3\%s' % request.form['project_name'])
+        spider_info = SpiderInfoDB(name=request.form['name'], sp_url=request.form['website'], run_count=0, item_count=0,
+                                   url_count=0, introduce=request.form['introduce'], project=request.form['project'],
+                                   create_time=datetime.datetime.now(), version='1.0')
+        # 后面添加读取当前登录用户功能
+        opara_log = OperaLog(operation='create_spider', person='txl', create_time=datetime.datetime.now())
+        db.session.add(spider_info)
+        db.session.add(opara_log)
+        db.session.commit()
+    except KeyError as e:
+        _ = e
+        flash('请填写完整信息...')
+    return redirect(url_for('spiMain.spider_base'))
