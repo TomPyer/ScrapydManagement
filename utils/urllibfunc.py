@@ -10,6 +10,10 @@ def get_url_act(url):
     return eval(request.urlopen(url).read())
 
 
+def get_url_html(url):
+    return request.urlopen(url).read()
+
+
 def post_url_act(url, data):
     arg_list = []
     for k, v in data.items():

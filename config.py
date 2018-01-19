@@ -28,6 +28,7 @@ class DevelopmentConfig(Config):
                               'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
     # scrapyd相关API
     SCRAPYD_URL = 'http://127.0.0.1:6800/'
+    GET_JOB_URL = 'http://127.0.0.1:6800/jobs'
     GET_PROJECTS_URL = 'http://127.0.0.1:6800/listprojects.json'
     GET_SPIDERS_URL = 'http://127.0.0.1:6800/listspiders.json'
     GET_SPIDER_BAT_URL = 'http://127.0.0.1:6800/listversions.json'
