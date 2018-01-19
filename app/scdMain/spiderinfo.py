@@ -44,13 +44,12 @@ class SpiderInfo(object):
     def get_scrapy_project_info(self):
         # 获取项目信息
         response = get_url_act(current_app.config['GET_PROJECTS_URL'])
+        print(response)
         project_list = response['projects']
         project_dic = {}
         self.projects_count = len(project_list)
         for project_name in project_list:
-            print(project_name)
             resp = post_url_act(current_app.config['GET_SPIDERS_URL'], data={'project': project_name})
-            print(resp)
             project_dic[project_name] = resp['spiders']
             self.spiders_count += len(resp['spiders'])
         return project_dic

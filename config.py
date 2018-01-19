@@ -42,6 +42,9 @@ class DevelopmentConfig(Config):
     REDIS_HOST = '127.0.0.1'
     REDIS_POST = '6379'
 
+    # scrapy目录配置
+    SCRAPYPWD = 'D:\work\scrapyPython3'
+
 
 class TestingConfig(Config):
     # 测试环境

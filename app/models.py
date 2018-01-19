@@ -38,16 +38,29 @@ class ScrapyProject(db.Model):
     spider_count = db.Column(db.Integer)        # 该项目下爬虫总数
     introduce = db.Column(db.Text)              # 项目简介
     create_time = db.Column(db.DateTime)
+    node_name = db.Column(db.String(30))
+    version = db.Column(db.String(20))
 
 
-class SpiderInfo(db.Model):
+class SpiderInfoDB(db.Model):
     __tablename__ = 'spider_info'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20), index=True)
+    name = db.Column(db.String(30), index=True)
     sp_url = db.Column(db.String(120))          # 该爬虫的url
+    status = db.Column(db.String(20))           # 当前状态
+    run_time = db.Column(db.Integer)            # 当前状态持续时间
     run_count = db.Column(db.Integer)           # 工作次数
     item_count = db.Column(db.Integer)          # 爬取的item数量
     url_count = db.Column(db.Integer)           # 爬取的页面数量
     introduce = db.Column(db.Text)              # 爬虫简介
-    project_id = db.Column(db.Integer)          # 所属项目组ID
+    project = db.Column(db.String(20))             # 所属项目组
+    version = db.Column(db.String(20))
+    create_time = db.Column(db.DateTime)
+
+
+class OperaLog(db.Model):
+    __tablename__ = 'opera_log'
+    id = db.Column(db.Integer, primary_key=True)
+    operation = db.Column(db.String(50))
+    person = db.Column(db.String(50))
     create_time = db.Column(db.DateTime)
