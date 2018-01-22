@@ -27,9 +27,9 @@
                     <td>{{data['job']}}</td>
                     <td>{{data['pid']}}</td>
                     <td>{{data['start']}}</td>
-                    <td>{{data['runtime']}}</td>
+                    <td>{{data['runtime']}} s</td>
                     <td>{{data['finish']}}</td>
-                    <td>{{data['log']}}</td>
+                    <td><a href={{data['log']}} id='loga' >查看日志</a></td>
                 </tr>
             {% endfor%}
             </tbody>
@@ -44,23 +44,23 @@
                         <!--&times;-->
                     <!--</button>-->
                     <!--<h4 class="modal-title" id="myModalLabel">-->
-                        <!--创 建 项 目-->
+                        <!--查 看 日 志-->
                     <!--</h4>-->
                 <!--</div>-->
                 <!--<div class="modal-body">-->
-                    <!--<tr>-->
-                        <!--<td>爬虫名称: <input class="form-control"></td>-->
-                        <!--<td>所属项目: <input class="form-control"></td>-->
-                        <!--<td>创建人: <input class="form-control"></td>-->
-                        <!--<td>创建时间: <input class="form-control"></td>-->
-                    <!--</tr>-->
+                    <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<td>爬虫名称: <input class="form-control"></td>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<td>所属项目: <input class="form-control"></td>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<td>创建人: <input class="form-control"></td>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<td>创建时间: <input class="form-control"></td>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</tr>&ndash;&gt;-->
                 <!--</div>-->
                 <!--<div class="modal-footer">-->
                     <!--<button type="button" class="btn btn-default" data-dismiss="modal">关闭-->
                     <!--</button>-->
-                    <!--<button type="button" class="btn btn-primary">-->
-                        <!--提交-->
-                    <!--</button>-->
+                    <!--&lt;!&ndash;<button type="button" class="btn btn-primary">&ndash;&gt;-->
+                        <!--&lt;!&ndash;提交&ndash;&gt;-->
+                    <!--&lt;!&ndash;</button>&ndash;&gt;-->
                 <!--</div>-->
             <!--</div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
         <!--</div>&lt;!&ndash; /.modal &ndash;&gt;-->

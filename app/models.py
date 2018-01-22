@@ -64,3 +64,14 @@ class OperaLog(db.Model):
     operation = db.Column(db.String(50))
     person = db.Column(db.String(50))
     create_time = db.Column(db.DateTime)
+
+
+class TaskInfo(db.Model):
+    __tablename__ = 'task_info'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), index=True)
+    work_num = db.Column(db.Integer)
+    create_time = db.Column(db.DateTime)
+    create_person = db.Column(db.String(50))
+    status = db.Column(db.String(20))
+    introduce = db.Column(db.String(20))
