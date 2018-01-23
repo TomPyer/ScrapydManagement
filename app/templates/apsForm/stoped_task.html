@@ -32,7 +32,7 @@
         </table>
     </div>
     <div class="col-lg-1"></div>
-    <form class="form-horizontal" role="form" method="post" action="/taskMain/create_task">
+    <form class="form-horizontal" role="form" method="post" action="/taskMain/create_task" onload="load()">
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -46,17 +46,44 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="uname" class="col-sm-2 control-label">任务名称: </label>
+                            <label for="name" class="col-sm-2 control-label">任务名称: </label>
                             <div class="col-sm-9">
-                                <input type="text" id="uname" name="uname" class="form-control well" placeholder="请输入任务名称"/>
+                                <input type="text" id="name" name="name" class="form-control well" placeholder="请输入任务名称"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="content" class="col-sm-2 control-label">调度类型: </label>
+                            <div class="col-sm-9 form-inline form-group" id="content" >
+                                <select class="form-control" name="dy_type" id="dy_type" onchange="changeCity(this)">
+                                    <option>date</option>
+                                    <option>interval</option>
+                                </select><span>&nbsp&nbsp&nbsp</span>
+                                <b>频率: 每</b><select class="form-control" id="dy_value" name="dy_value">
+                                    <option></option>
+                                </select><b>执行一次</b><br>
+                            </div></div>
+                        <div class="form-group">
+                            <label for="start_time" class="col-sm-2 control-label">开始时间: </label>
+                            <div class="col-sm-9">
+                                <input type="text" id="start_time" name="start_time" class="form-control well" placeholder="例：2018年1月23日 15:02:59"/>
+                            </div>
+                        </div><div class="form-group">
+                            <label for="end_time" class="col-sm-2 control-label">结束时间: </label>
+                            <div class="col-sm-9">
+                                <input type="text" id="end_time" name="end_time" class="form-control well" placeholder="例：2018年1月23日 15:02:59"/>
+                            </div>
+                        </div><div class="form-group">
+                            <label for="project" class="col-sm-2 control-label">项目名称: </label>
+                            <div class="col-sm-9">
+                                <input type="text" id="project" name="project" class="form-control well" placeholder="例：testproject"/>
+                            </div>
+                        </div><div class="form-group">
+                            <label for="spider" class="col-sm-2 control-label">爬虫名称: </label>
+                            <div class="col-sm-9">
+                                <input type="text" id="spider" name="spider" class="form-control well" placeholder="例：testspider"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="conent" class="col-sm-2 control-label">执行内容: </label>
-                            <div class="col-sm-9">
-                                <input type="text" id="conent" name="conent" class="form-control well" placeholder="请输入执行内容"/>
-                            </div>
-                        </div><div class="form-group">
                             <label for="introduce" class="col-sm-2 control-label">任务简介: </label>
                             <div class="col-sm-9">
                                 <input type="text" id="introduce" name="introduce" class="form-control well" placeholder="请输入任务简介"/>
@@ -74,5 +101,27 @@
             </div><!-- /.modal -->
         </div>
     </form>
+
+    <script>
+        var province=document.getElementById("dy_type");
+        var city=document.getElementById("dy_value");
+        var arr_prov=new Array(new Option("date",'date'),new Option("interval","interval"));
+        var arr_city=new Array();
+        arr_city[0]=new Array(new Option("无", 'none'));
+        arr_city[1]=new Array(new Option("天",'d'),new Option("小时",'h'),new Option("分钟",'m'),new Option("秒",'s'));
+        function load(){
+            for(var i=0;i<arr_prov.length;i++){
+                province.options[i]=arr_prov[i];
+            }
+        }
+        function changeCity(){
+            //清空上次的选项
+            city.options.length=0;
+            var index=province.selectedIndex;
+            for(var i=0;i<arr_city[index].length;i++){
+                city.options[i]=arr_city[index][i];
+            }
+        }
+    </script>
 </section>
 {% endblock %}
