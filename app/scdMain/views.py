@@ -11,7 +11,8 @@ from app import mail, db
 
 import traceback
 import subprocess
-import datetime
+from datetime import datetime
+import os
 from .spiderinfo import SpiderInfo
 
 
@@ -128,23 +129,35 @@ def create_prject():
     # 创建项目
     if request.method == 'POST':
         try:
-            # subprocess.Popen(['scrapy', 'startproject', request.form['name']], cwd=current_app.config['SCRAPYPWD'], stdout=subprocess.PIPE)
-            # id = db.Column(db.Integer, primary_key=True)
-            # name = db.Column(db.String(20), index=True)
-            # spider_count = db.Column(db.Integer)  # 该项目下爬虫总数
-            # introduce = db.Column(db.Text)  # 项目简介
-            # create_time = db.Column(db.DateTime)
-            # node_name = db.Column(db.String(30))
-            # version = db.Column(db.String(20))
+            subprocess.Popen(['scrapy', 'startproject', request.form['name']], cwd='D:\work\scrapyProject')
+            dirs = 'D:\work\scrapyProject\%s\scrapy.cfg' % request.form['name']
+            flag = True
+            now = datetime.now()
+            while flag:
+                if int((datetime.now() - now).seconds) > 10 or os.path.exists(dirs):
+                    flag = False
+            with open(dirs, 'w') as f:
+                f.write('[settings]\n')
+                f.write('default=${project_name}.settings\n')
+                f.write('\n')
+                f.write('[deploy]\n')
+                f.write('url=http://localhost:6800/\n')
+                f.write('project=${project_name}\n')
+            project_dir = os.path.join('D:\work\scrapyProject', request.form['name'])
+            if os.path.exists(project_dir):
+                subprocess.Popen(['scrapyd-deploy', '--version', request.form['version']], cwd=project_dir, shell=True)
+
             project_info = ScrapyProject(name=request.form['name'], spider_count=0, introduce=request.form['introduce'],
-                                         create_time=datetime.datetime.now(), node_name='', version=request.form['version'])
-            opara_log = OperaLog(operation='create_project', person='txl', operation_name=requesti.form['name'],
-                                 create_time=datetime.datetime.now())
+                                         create_time=datetime.now(), node_name='', version=request.form['version'])
+            opara_log = OperaLog(operation='create_project', person='txl', operation_name=request.form['name'],
+                                 create_time=datetime.now())
             db.session.add(opara_log)
             db.session.add(project_info)
             db.session.commit()
         except KeyError as e:
             flash('请填写完整信息..')
+        except Exception as e:
+            flash('未知错误...')
         return redirect(url_for('spiMain.project_base'))
 
 
@@ -152,22 +165,14 @@ def create_prject():
 def create_spider():
     # 创建爬虫
     try:
-        # name = db.Column(db.String(20), index=True)
-        # sp_url = db.Column(db.String(120))  # 该爬虫的url
-        # run_count = db.Column(db.Integer)  # 工作次数
-        # item_count = db.Column(db.Integer)  # 爬取的item数量
-        # url_count = db.Column(db.Integer)  # 爬取的页面数量
-        # introduce = db.Column(db.Text)  # 爬虫简介
-        # project = db.Column(db.Integer)  # 所属项目组ID
-        # create_time = db.Column(db.DateTime)
-        # subprocess.Popen(['scrapy', 'genspider', request.form['name'], request.form['website']],
-        #                  cwd='D:\work\scrapyPython3\%s' % request.form['project_name'])
+        subprocess.Popen(['scrapy', 'genspider', request.form['name'], request.form['website']],
+                         cwd='D:\work\scrapyProject\%s' % request.form['project'])
         spider_info = SpiderInfoDB(name=request.form['name'], sp_url=request.form['website'], run_count=0, item_count=0,
                                    url_count=0, introduce=request.form['introduce'], project=request.form['project'],
-                                   create_time=datetime.datetime.now(), version='1.0')
+                                   create_time=datetime.now(), version='1.0')
         # 后面添加读取当前登录用户功能
-        opara_log = OperaLog(operation='create_spider', person='txl', operation_name=requesti.form['name'],
-                             create_time=datetime.datetime.now())
+        opara_log = OperaLog(operation='create_spider', person='txl', operation_name=request.form['name'],
+                             create_time=datetime.now())
         db.session.add(spider_info)
         db.session.add(opara_log)
         db.session.commit()
