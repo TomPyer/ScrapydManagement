@@ -138,7 +138,8 @@ def create_prject():
             # version = db.Column(db.String(20))
             project_info = ScrapyProject(name=request.form['name'], spider_count=0, introduce=request.form['introduce'],
                                          create_time=datetime.datetime.now(), node_name='', version=request.form['version'])
-            opara_log = OperaLog(operation='create_project', person='txl', create_time=datetime.datetime.now())
+            opara_log = OperaLog(operation='create_project', person='txl', operation_name=requesti.form['name'],
+                                 create_time=datetime.datetime.now())
             db.session.add(opara_log)
             db.session.add(project_info)
             db.session.commit()
@@ -165,7 +166,8 @@ def create_spider():
                                    url_count=0, introduce=request.form['introduce'], project=request.form['project'],
                                    create_time=datetime.datetime.now(), version='1.0')
         # 后面添加读取当前登录用户功能
-        opara_log = OperaLog(operation='create_spider', person='txl', create_time=datetime.datetime.now())
+        opara_log = OperaLog(operation='create_spider', person='txl', operation_name=requesti.form['name'],
+                             create_time=datetime.datetime.now())
         db.session.add(spider_info)
         db.session.add(opara_log)
         db.session.commit()

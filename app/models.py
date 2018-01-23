@@ -61,8 +61,9 @@ class SpiderInfoDB(db.Model):
 class OperaLog(db.Model):
     __tablename__ = 'opera_log'
     id = db.Column(db.Integer, primary_key=True)
-    operation = db.Column(db.String(50))
-    person = db.Column(db.String(50))
+    operation = db.Column(db.String(50))        # 操作名称
+    operation_name = db.Column(db.String(50))   # 被操作对象名称
+    person = db.Column(db.String(50))           # 执行人
     create_time = db.Column(db.DateTime)
 
 
@@ -71,6 +72,7 @@ class TaskInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), index=True)
     work_num = db.Column(db.Integer)
+    content = db.Column(db.String(200))
     create_time = db.Column(db.DateTime)
     create_person = db.Column(db.String(50))
     status = db.Column(db.String(20))
