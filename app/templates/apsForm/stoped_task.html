@@ -54,14 +54,24 @@
                         <div>
                             <label for="content" class="col-sm-2 control-label">调度类型: </label>
                             <div class="col-sm-9 form-inline form-group" id="content" >
-                                <select class="form-control" name="dy_type" id="dy_type" onchange="changeCity(this)">
-                                    <option>date</option>
-                                    <option>interval</option>
-                                </select><span>&nbsp&nbsp&nbsp</span>
-                                <b>频率: 每</b><select class="form-control" id="dy_value" name="dy_value">
-                                    <option></option>
-                                </select><b>执行一次</b><br>
-                            </div></div>
+                                <div style="display: inline-block;">
+                                    <select class="form-control" name="dy_type" id="dy_type" onchange="changeCity(this)">
+                                        <option>date</option>
+                                        <option>interval</option>
+                                    </select>
+                                </div>
+                                <span>&nbsp&nbsp&nbsp</span>
+                                <div style="display: none" id="py_content" class="form-inline">
+                                    <b>频率: 每</b>
+                                    <div class="input-group ">
+                                        <input type="text" class="form-control" name="dy_vv" style="width: 45px; border-radius:4.5px;">
+                                    </div>
+                                    <select class="form-control" id="dy_value" name="dy_value">
+                                        <option></option>
+                                    </select><b>执行一次</b><br>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="start_time" class="col-sm-2 control-label">开始时间: </label>
                             <div class="col-sm-9">
@@ -120,6 +130,13 @@
             var index=province.selectedIndex;
             for(var i=0;i<arr_city[index].length;i++){
                 city.options[i]=arr_city[index][i];
+            }
+            var ui =document.getElementById("py_content");
+            if(ui.style.display=='none'){
+                ui.style.display='inline';
+            }
+            else{
+                ui.style.display='none';
             }
         }
     </script>

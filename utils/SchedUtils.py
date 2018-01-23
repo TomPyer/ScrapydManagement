@@ -11,7 +11,7 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor  
 
 from flask import current_app
 
-from datetime import date
+from datetime import datetime
 
 
 class SchedulerUtils(object):
@@ -52,17 +52,34 @@ class SchedulerUtils(object):
         :param kwargs:    具体执行的时间(根据不同调度策略有不同的值)
         :return:        None
         """
+        task_id = str(task_id)
         if trigger == 'cron':
-            self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, start_date=kwargs['start_date'],
-                               end_date=kwargs['end_date'], year=kwargs['year'], month=kwargs['month'],
+            # 暂不启用
+            self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, start_date=self.date_zh(kwargs['start_time']),
+                               end_date=self.date_zh(kwargs['end_time']), year=kwargs['year'], month=kwargs['month'],
                                day=kwargs['day'], hour=kwargs['hour'], minute=kwargs['minute'], second=0,
                                replace_existing=True)
         elif trigger == 'date':
-            self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, run_date=kwargs['run_date'],
+            self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, run_date=self.date_zh(kwargs['start_time']),
                                replace_existing=True)
         elif trigger == 'interval':
-            self.sched.add_jbo(func, trigger, jobstore=jobstore, id=task_id, days=kwargs['days'], hours=kwargs['hours'],
-                               minutes=kwargs['minutes'], seconds=kwargs['seconds'])
+            #  days=kwargs['days'], hours=kwargs['hours'], minutes=kwargs['minutes'], seconds=kwargs['seconds'],
+            if kwargs['dy_value'] == 'd':
+                self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, days=kwargs['dy_vv'],
+                                   start_date=self.date_zh(kwargs['start_time']),
+                                   end_date=self.date_zh(kwargs['end_time']))
+            elif kwargs['dy_value'] == 'h':
+                self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, hours=kwargs['dy_vv'],
+                                   start_date=self.date_zh(kwargs['start_time']),
+                                   end_date=self.date_zh(kwargs['end_time']))
+            elif kwargs['dy_value'] == 'm':
+                self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, minutes=kwargs['dy_vv'],
+                                   start_date=self.date_zh(kwargs['start_time']),
+                                   end_date=self.date_zh(kwargs['end_time']))
+            elif kwargs['dy_value'] == 's':
+                self.sched.add_job(func, trigger, jobstore=jobstore, id=task_id, seconds=kwargs['dy_vv'],
+                                   start_date=self.date_zh(kwargs['start_time']),
+                                   end_date=self.date_zh(kwargs['end_time']))
         self.sched.start()
 
     def remove_task(self, task_id, jobstore='redis'):
@@ -90,6 +107,14 @@ class SchedulerUtils(object):
 
     def get_tasks(self):
         return self.sched.get_jobs()
+
+    def date_zh(self, dates):
+        # ['2018年1月23日 17:11:34']
+        year = int(dates[0].split('年')[0])
+        month = int(dates[0].split('月')[0].split('年')[1])
+        day = int(dates[0].split('月')[1].split('日')[0])
+        other = dates[0].split(' ')[1].split(':')
+        return datetime(year, month, day, int(other[0]), int(other[1]), int(other[2]))
 
     """ cron 定时调度 (某一定时刻执行)
         ----(int|str) 表示参数既可以是int类型，也可以是str类型
