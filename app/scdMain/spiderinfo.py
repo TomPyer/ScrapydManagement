@@ -79,7 +79,7 @@ class SpiderTask(object):
         """
         resp = post_url_act(url=current_app.config['START_SPIDER_URL'],
                             data={'project': project_name, 'spider': spider_name})
-        return (True, resp['jobid']) if resp['status'] == 'ok' else (False, resp['msg'])
+        return (True, resp['jobid']) if resp['status'] == 'ok' else (False, '执行失败')
 
     @staticmethod
     def stop_spider(project_name, spider_id):

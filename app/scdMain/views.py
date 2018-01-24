@@ -169,7 +169,7 @@ def create_spider():
                          cwd='D:\work\scrapyProject\%s' % request.form['project'])
         spider_info = SpiderInfoDB(name=request.form['name'], sp_url=request.form['website'], run_count=0, item_count=0,
                                    url_count=0, introduce=request.form['introduce'], project=request.form['project'],
-                                   create_time=datetime.now(), version='1.0')
+                                   create_time=datetime.now(), version='1.0', status='stop')
         # 后面添加读取当前登录用户功能
         opara_log = OperaLog(operation='create_spider', person='txl', operation_name=request.form['name'],
                              create_time=datetime.now())
