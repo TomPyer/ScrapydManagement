@@ -69,20 +69,6 @@
       </div>
     </header><!-- header close -->
 
-     <!-- Slider Start -->
-        <!--<section id="global-header">-->
-          <!--<div class="container">-->
-            <!--<div class="row">-->
-              <!--<div class="col-md-12">-->
-                <!--<div class="block">-->
-                  <!--<h1>Scrapyd Management 系统登陆 </h1>-->
-                  <!--<p>登 陆 后 才 能 够 进 行 发 言， 未 注 册 的 话 请 联 系 管 理 员， 暂 时 不 开 放 注 册 功 能</p>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</section>-->
-        <!-- contact form start -->
     </section>
     <section id="work-table" style="padding-top: 70px">
         <div class="container-fluid">
@@ -159,22 +145,6 @@
             </div>
         </div>
     </section>
-<!-- Call to action Start -->
-    <!--<section id="call-to-action">-->
-      <!--<div class="container">-->
-        <!--<div class="row">-->
-          <!--<div class="col-md-12">-->
-            <!--<div class="block">-->
-              <!--<h2>我 将 致 力 于 完 善 该 系 统</h2>-->
-              <!--<p>该 系 统 暂 时 不 成 熟， 功 能 不 齐 全， 至 少 实 现 的 不 齐 全， 如 果 你 有 什 么 好 的 意 见 或 建 议， 欢 迎 点 击 下 面 的 按 钮 告 诉 我 们 </p>-->
-              <!--<a class="btn btn-default btn-call-to-action" href="#" >告 诉 我 你 的 想 法</a>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</section>-->
-
-    <!-- footer Start -->
     <footer>
         <div class="container">
             <div class="row">
@@ -193,9 +163,23 @@
             </div>
         </div>
     </footer>
-
-
-
-
     </body>
+<script>
+    $(document).ready(function(){
+      $("button").click(function(){
+        var tr1 = this.parentNode.parentNode;
+        var spider_name = tr1.cells[0].innerText;
+        var project_name = tr1.cells[1].innerText;
+        var act = tr1.cells[5].innerText;
+        $.post("/spiMain/action_spider",
+        {
+          spider:spider_name,
+          project:project_name,
+          act:act
+        }
+        );
+        window.location.reload()
+      });
+    });
+</script>
 </html>
