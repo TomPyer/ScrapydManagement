@@ -145,7 +145,7 @@ def create_prject():
                 f.write('project=${project_name}\n')
             project_dir = os.path.join('D:\work\scrapyProject', request.form['name'])
             if os.path.exists(project_dir):
-                subprocess.Popen(['scrapyd-deploy', '--version', request.form['version']], cwd=project_dir, shell=True)
+                subprocess.Popen(['scrapyd-deploy'], cwd=project_dir, shell=True)
 
             project_info = ScrapyProject(name=request.form['name'], spider_count=0, introduce=request.form['introduce'],
                                          create_time=datetime.now(), node_name='', version=request.form['version'])
@@ -167,6 +167,7 @@ def create_spider():
     try:
         subprocess.Popen(['scrapy', 'genspider', request.form['name'], request.form['website']],
                          cwd='D:\work\scrapyProject\%s' % request.form['project'])
+        subprocess.Popen(['scrapyd-deploy'], cwd='D:\work\scrapyProject\%s' % request.form['project'])
         spider_info = SpiderInfoDB(name=request.form['name'], sp_url=request.form['website'], run_count=0, item_count=0,
                                    url_count=0, introduce=request.form['introduce'], project=request.form['project'],
                                    create_time=datetime.now(), version='1.0', status='stop')
