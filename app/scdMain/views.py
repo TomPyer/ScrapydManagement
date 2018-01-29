@@ -148,7 +148,7 @@ def create_prject():
                 subprocess.Popen(['scrapyd-deploy'], cwd=project_dir, shell=True)
 
             project_info = ScrapyProject(name=request.form['name'], spider_count=0, introduce=request.form['introduce'],
-                                         create_time=datetime.now(), node_name='', version=request.form['version'])
+                                         create_time=datetime.now(), node_name='')
             opara_log = OperaLog(operation='create_project', person='txl', operation_name=request.form['name'],
                                  create_time=datetime.now())
             db.session.add(opara_log)
@@ -164,10 +164,14 @@ def create_prject():
 @scdMain.route('/create_spider', methods=['POST'])
 def create_spider():
     # 创建爬虫
+    import time
     try:
         subprocess.Popen(['scrapy', 'genspider', request.form['name'], request.form['website']],
                          cwd='D:\work\scrapyProject\%s' % request.form['project'])
-        subprocess.Popen(['scrapyd-deploy'], cwd='D:\work\scrapyProject\%s' % request.form['project'])
+        pat = os.path.join('D:\work\scrapyProject\%s\%s' % (request.form['project'],request.form['project']), 'spiders', request.form['name'])
+        if not os.path.join(pat):
+            time.sleep(3)
+        subprocess.Popen(['scrapyd-deploy'], cwd='D:\work\scrapyProject\%s' % request.form['project'], shell=True)
         spider_info = SpiderInfoDB(name=request.form['name'], sp_url=request.form['website'], run_count=0, item_count=0,
                                    url_count=0, introduce=request.form['introduce'], project=request.form['project'],
                                    create_time=datetime.now(), version='1.0', status='stop')
@@ -180,4 +184,7 @@ def create_spider():
     except KeyError as e:
         _ = e
         flash('请填写完整信息...')
+    except Exception as e:
+        _ = e
+        flash(e)
     return redirect(url_for('spiMain.spider_base'))

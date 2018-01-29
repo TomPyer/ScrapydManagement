@@ -26,6 +26,11 @@
                     <td>{{data['create_date']}}</td>
                     <td>{{data['create_pre']}}</td>
                     <td>{{data['status']}}</td>
+                    {% if data['status'] == 'stop' %}
+                    <td><button class="btn btn-success btn-sm">启动</button></td>
+                    {% else %}
+                    <td><button class="btn btn-danger btn-sm">停止</button></td>
+                    {% endif %}
                 </tr>
             {% endfor%}
             </tbody>

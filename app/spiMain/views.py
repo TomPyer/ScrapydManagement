@@ -61,38 +61,52 @@ def project_base():
 def spider_base():
     # 爬虫页面
     spider_info = SpiderInfoDB.query.all()
+    project_info = ScrapyProject.query.all()
     re_list = []
+    project_list = []
+    if request.args.get('project'):
+        spider_info = SpiderInfoDB.query.filter_by(project=request.args.get('project')).all()
     for spider in spider_info:
         temp_data = {'spider': spider.name, 'project': spider.project, 'node_name': '', 'create_date': spider.create_time,
                    'version': spider.version, 'status': spider.status, 'status_time(minu)': spider.run_time}
         re_list.append(temp_data)
-    return render_template('apsForm/spider_base.html', re_list=re_list)
+    for p in project_info:
+        project_list.append(p.name)
+    return render_template('apsForm/spider_base.html', re_list=re_list, project_list=project_list)
 
 
 @spiMain.route('/spider_run_base', methods=['GET'])
 def spider_run_base():
     # 运行中爬虫页面
     spider_info = SpiderInfoDB.query.filter_by(status='running').all()
+    project_info = ScrapyProject.query.all()
     re_list = []
+    project_list = []
     for spider in spider_info:
         temp_data = {'spider': spider.name, 'project': spider.project, 'node_name': '',
                      'create_date': spider.create_time,
                      'version': spider.version, 'status': spider.status, 'status_time(minu)': spider.run_time}
         re_list.append(temp_data)
-    return render_template('apsForm/spider_base.html', re_list=re_list)
+    for p in project_info:
+        project_list.append(p.name)
+    return render_template('apsForm/spider_base.html', re_list=re_list, project_list=project_list)
 
 
 @spiMain.route('/spider_pad_base', methods=['GET'])
 def spider_pad_base():
-    # 运行中爬虫页面
+    # 待运行爬虫页面
     spider_info = SpiderInfoDB.query.filter_by(status='padding').all()
+    project_info = ScrapyProject.query.all()
     re_list = []
+    project_list = []
     for spider in spider_info:
         temp_data = {'spider': spider.name, 'project': spider.project, 'node_name': '',
                      'create_date': spider.create_time,
                      'version': spider.version, 'status': spider.status, 'status_time(minu)': spider.run_time}
         re_list.append(temp_data)
-    return render_template('apsForm/spider_base.html', re_list=re_list)
+    for p in project_info:
+        project_list.append(p.name)
+    return render_template('apsForm/spider_base.html', re_list=re_list, project_list=project_list)
 
 
 @spiMain.route('/suc_task', methods=['GET'])

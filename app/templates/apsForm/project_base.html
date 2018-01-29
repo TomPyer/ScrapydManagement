@@ -18,7 +18,7 @@
               </thead>
             <tbody>
             {% for data in re_list %}
-                <tr>
+                <tr onclick="click_to(this)">
                     <td>{{data['project_name']}}</td>
                     <td>{{data['spiders']}}</td>
                     <td>{{data['node_name']}}</td>
@@ -75,4 +75,12 @@
     </form>
 
 </section>
+<script>
+    function click_to(obj) {
+        var project = obj.cells[0].innerHTML;
+        url = '/spiMain/spider_base?project=' + project;
+        window.location.href= url;
+//        window.open('你所要跳转的页面');
+    }
+</script>
 {% endblock %}
