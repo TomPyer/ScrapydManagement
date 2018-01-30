@@ -1,9 +1,9 @@
 #! coding:utf-8
 from app.scdMain import scdMain                                 # 自定义app
-from flask import render_template, request, redirect, url_for, flash, current_app   # 基础内容
+from flask import render_template, request, redirect, url_for, flash, current_app, session   # 基础内容
 from app.models import User, SpiderLog, db                      # 模板内容
 from utils.crypt import signature, des_encrypt, gen_md5_salt    # 加密函数
-from flask_login import login_required, logout_user             # 路由保护
+from flask_login import login_required, logout_user, login_user             # 路由保护
 from app.scdMain.forms import LoginForm, RegisterForm
 from flask_mail import Message
 from app.models import ScrapyProject, SpiderInfoDB, SpiderLog, OperaLog
@@ -39,15 +39,13 @@ def register():
 @scdMain.route('/login', methods=['POST', 'GET'])
 def login():
     # 登录
-    error = None
     form = LoginForm()
-    if request.method == 'POST':
-        if valid_login(request.form['email'],
-                       request.form['password']):
-            return log_the_user_in(request.form['email'])
-        else:
-            error = 'Invalid username/password'
-    return render_template('login.html', error=error, form=form)
+    us_obj = User.query.filter_by(email=request.form['email']).first()
+    if us_obj:
+        login_user(us_obj)
+    else:
+        flash('用户名或密码错误!')
+    return render_template('contact.html', form=form)
 
 
 @scdMain.route('/logout')
@@ -64,7 +62,7 @@ def valid_login(email, pwd):
     if us_obj:
         token = us_obj.token
         pwd = des_encrypt(pwd, token)
-        if pwd == us_obj.passwd:
+        if pwd == (us_obj.passwd.encode(encoding='utf-8')):
             return True
         else:
             return False
@@ -72,9 +70,14 @@ def valid_login(email, pwd):
         return False
 
 
-def log_the_user_in(user):
+def log_the_user_in(email):
     # 登录后的操作, 登录系统暂时不完整, 以后再写
-    return render_template('index.html')
+    login_user(email)       # 保存登录状态
+    us_obj = User.query.filter_by(email=email).first()
+    name = us_obj.username
+    level = us_obj.level            # 后期权限使用
+    login_user(us_obj)
+    return render_template('apsched.html', username=name)
 
 
 @scdMain.route('/index', methods=['GET', 'POST'])

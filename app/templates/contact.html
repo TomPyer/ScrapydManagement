@@ -84,15 +84,16 @@
         <!-- contact form start -->
         <section id="contact-form">
           <div class="container">
+            <div align="center"><h3><b style="color: #4A4656;">{{get_flashed_messages()[0]}}</b></h3></div>
             <div class="row">
               <div class="col-md-6 col-sm-12">
                 <div class="block">
                   <form method="post" action="login">
-                    <div class="form-group" name="username">
-                      <input type="text" class="form-control" placeholder="请输入你的邮箱">
+                    <div class="form-group" name="email">
+                      <input type="text" class="form-control" name="email" placeholder="请输入你的邮箱">
                     </div>
                     <div class="form-group" name="password">
-                      <input type="text" class="form-control" placeholder="请输入你的密码">
+                      <input type="text" class="form-control" name="password" placeholder="请输入你的密码">
                     </div>
                     <div><button class="submit">登入</button></div>
                   </form>
@@ -170,8 +171,5 @@
             </div>
           </div>
         </footer>
-        
-        
-        
       </body>
     </html>

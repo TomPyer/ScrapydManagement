@@ -1,7 +1,7 @@
 #! coding:utf-8
-from app import db
+from app import db, login_manager
 from flask_login import UserMixin
-from . import login_manager
+from utils.crypt import signature, des_encrypt, gen_md5_salt
 
 
 class User(UserMixin, db.Model):
@@ -12,12 +12,15 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64))
     token = db.Column(db.String(64))
     level = db.Column(db.Integer)
+    # posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+    def __repr__(self):
+        return '<User %r>' % (self.username)
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    # flask-login 需要实现的回调函数
-    return User.query.get(int(user_id))
+def load_user(id):
+    return User.query.get(int(id))
 
 
 class SpiderLog(db.Model):
