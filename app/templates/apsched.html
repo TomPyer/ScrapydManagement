@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="../static/css/ionicons.min.css">
     <link rel="stylesheet" href="../static/css/animate.css">
     <link rel="stylesheet" href="../static/css/responsive.css">
+    <link rel="stylesheet" href="../static/fonts">
+
 
     <!-- Js -->
     <script src="../static/js/vendor/modernizr-2.6.2.min.js"></script>
@@ -62,9 +64,6 @@
                     <li><a href="#"><b>施工建设中</b></a></li>
                   </ul>
               </div><!-- /.navbar-collapse -->
-              <div>
-                  <a href="#"><b>{{username}}</b></a>
-              </div>
             </div><!-- /.container-fluid -->
           </nav>
         </div>
@@ -73,7 +72,7 @@
   </header><!-- header close -->
 
     </section>
-    <section id="work-table" style="padding-top: 70px">
+    <section id="work-table" style="padding-top: 40px">
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="col-lg-1"></div>
@@ -149,6 +148,18 @@
                 <div class="alert-info text-center">{{get_flashed_messages()[0]}}</div>
                 {% block apsched_form %}
                 {% endblock %}
+                <div class="col-lg-2">
+                    <div>
+                        <table class="table table-hover" style="width: auto">
+                            <tr><td>用户信息</td></tr>
+                            <tr><td><span class="glyphicon glyphicon-user">   {{user}}</span></td></tr>
+                            <tr><td><span class="glyphicon glyphicon-envelope">  {{email}}</span></td></tr>
+                            <tr><td><span class="glyphicon glyphicon-th-list">  {{typ}}数量：{{counts}}</span></td></tr>
+                            <tr><td><span class="glyphicon glyphicon-eye-open">  {{level}}</span></td></tr>
+                            <tr><td><a class="btn-default" href="/scdMain/logout">登出</a></td></tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
