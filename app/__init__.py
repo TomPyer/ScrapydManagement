@@ -13,7 +13,8 @@ moment = Moment()
 db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'  # None/basic/strong 代表不同的安全等级
-login_manager.login_view = 'scdMain.login'   # 定义login view,在login_required装饰器中用到
+login_manager.login_view = 'scdMain.contact'   # 定义login view,在login_required装饰器中用到
+login_manager.login_message = '请先登录系统..'
 
 
 def app_create(config_name):

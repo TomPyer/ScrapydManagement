@@ -11,11 +11,15 @@ class User(UserMixin, db.Model):
     passwd = db.Column(db.String(64))
     email = db.Column(db.String(64))
     token = db.Column(db.String(64))
-    level = db.Column(db.Integer)
+    project_count = db.Column(db.Integer)
+    spider_count = db.Column(db.Integer)
+    task_count = db.Column(db.Integer)
+    level_num = db.Column(db.Integer)
+    level = db.Column(db.String(20))
     # posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def __repr__(self):
-        return '<User %r>' % (self.username)
+        return '<User {}>'.format(self.username)
 
 
 @login_manager.user_loader
@@ -40,6 +44,7 @@ class ScrapyProject(db.Model):
     name = db.Column(db.String(20), index=True)
     spider_count = db.Column(db.Integer)        # 该项目下爬虫总数
     introduce = db.Column(db.Text)              # 项目简介
+    create_person = db.Column(db.String(30))
     create_time = db.Column(db.DateTime)
     node_name = db.Column(db.String(30))
     version = db.Column(db.String(20))
@@ -58,6 +63,7 @@ class SpiderInfoDB(db.Model):
     introduce = db.Column(db.Text)              # 爬虫简介
     project = db.Column(db.String(20))             # 所属项目组
     version = db.Column(db.String(20))
+    create_person = db.Column(db.String(30))
     create_time = db.Column(db.DateTime)
 
 

@@ -3,10 +3,10 @@ from app.scdMain import scdMain                                 # 自定义app
 from flask import render_template, request, redirect, url_for, flash, current_app, session   # 基础内容
 from app.models import User, SpiderLog, db                      # 模板内容
 from utils.crypt import signature, des_encrypt, gen_md5_salt    # 加密函数
-from flask_login import login_required, logout_user, login_user             # 路由保护
+from flask_login import login_required, logout_user, login_user, current_user             # 路由保护
 from app.scdMain.forms import LoginForm, RegisterForm
 from flask_mail import Message
-from app.models import ScrapyProject, SpiderInfoDB, SpiderLog, OperaLog
+from app.models import ScrapyProject, SpiderInfoDB, SpiderLog, OperaLog, TaskInfo
 from app import mail, db
 
 import traceback
@@ -24,7 +24,7 @@ def register():
             token = gen_md5_salt()
             user_obj = User(username=signature(request.form.get('username'), 'tangxl66'),
                             passwd=des_encrypt(request.form.get('password'), token), token=token,
-                            email=request.form.get('email'), level=0)
+                            email=request.form.get('email'), level_num=0)
             db.session.add(user_obj)
             db.session.commit()
             return render_template('index.html')
@@ -39,13 +39,24 @@ def register():
 @scdMain.route('/login', methods=['POST', 'GET'])
 def login():
     # 登录
-    form = LoginForm()
     us_obj = User.query.filter_by(email=request.form['email']).first()
-    if us_obj:
-        login_user(us_obj)
+    if valid_login(request.form['email'], request.form['password']):
+        login_user(us_obj)  # 保存登录状态
+        current_user.project_count = ScrapyProject.query.filter_by(create_person=us_obj.username).count()
+        current_user.spider_count = SpiderInfoDB.query.filter_by(create_person=us_obj.username).count()
+        current_user.task_count = TaskInfo.query.filter_by(create_person=us_obj.username).count()
+        current_user.level = get_identity(us_obj.level_num)
+        return redirect(url_for('spiMain.project_base', name=us_obj.username))
     else:
         flash('用户名或密码错误!')
-    return render_template('contact.html', form=form)
+        return redirect(url_for('scdMain.contact'))
+
+
+def get_identity(level):
+    if isinstance(level, int):
+        level = str(level)
+    identity_dic = {'0': '管理员', '1': '高级用户', '2': '游客'}
+    return identity_dic[level]
 
 
 @scdMain.route('/logout')
@@ -53,7 +64,7 @@ def login():
 def logout():
     # 登出
     logout_user()
-    return redirect(url_for('/login'))
+    return redirect(url_for('scdMain.contact'))
 
 
 def valid_login(email, pwd):
@@ -70,16 +81,6 @@ def valid_login(email, pwd):
         return False
 
 
-def log_the_user_in(email):
-    # 登录后的操作, 登录系统暂时不完整, 以后再写
-    login_user(email)       # 保存登录状态
-    us_obj = User.query.filter_by(email=email).first()
-    name = us_obj.username
-    level = us_obj.level            # 后期权限使用
-    login_user(us_obj)
-    return render_template('apsched.html', username=name)
-
-
 @scdMain.route('/index', methods=['GET', 'POST'])
 @scdMain.route('/', methods=['GET', 'POST'])
 def index():
@@ -90,7 +91,7 @@ def index():
 @scdMain.route('/contact', methods=['GET'])
 def contact():
     # 登录/注册页面
-    return render_template('contact.html')
+    return render_template('contact.html', name=request.args.get('name'))
 
 
 @scdMain.route('/work', methods=['GET'])
@@ -117,8 +118,9 @@ def message():
 
 
 @scdMain.route('/apsched', methods=['GET'])
+@login_required
 def apsched():
-    return render_template('apsched.html')
+    return render_template('apsched.html', name=request.args.get('name'))
 
 
 @scdMain.route('/fla', methods=['GET'])
@@ -128,6 +130,7 @@ def fla():
 
 
 @scdMain.route('/create_project', methods=['POST'])
+@login_required
 def create_prject():
     # 创建项目
     if request.method == 'POST':
@@ -151,8 +154,8 @@ def create_prject():
                 subprocess.Popen(['scrapyd-deploy'], cwd=project_dir, shell=True)
 
             project_info = ScrapyProject(name=request.form['name'], spider_count=0, introduce=request.form['introduce'],
-                                         create_time=datetime.now(), node_name='')
-            opara_log = OperaLog(operation='create_project', person='txl', operation_name=request.form['name'],
+                                         create_time=datetime.now(), node_name='', create_penson=current_user.username)
+            opara_log = OperaLog(operation='create_project', person=current_user.username, operation_name=request.form['name'],
                                  create_time=datetime.now())
             db.session.add(opara_log)
             db.session.add(project_info)
@@ -165,6 +168,7 @@ def create_prject():
 
 
 @scdMain.route('/create_spider', methods=['POST'])
+@login_required
 def create_spider():
     # 创建爬虫
     import time
@@ -177,9 +181,9 @@ def create_spider():
         subprocess.Popen(['scrapyd-deploy'], cwd='D:\work\scrapyProject\%s' % request.form['project'], shell=True)
         spider_info = SpiderInfoDB(name=request.form['name'], sp_url=request.form['website'], run_count=0, item_count=0,
                                    url_count=0, introduce=request.form['introduce'], project=request.form['project'],
-                                   create_time=datetime.now(), version='1.0', status='stop')
+                                   create_time=datetime.now(), version='1.0', status='stop', create_penson=current_user.username)
         # 后面添加读取当前登录用户功能
-        opara_log = OperaLog(operation='create_spider', person='txl', operation_name=request.form['name'],
+        opara_log = OperaLog(operation='create_spider', person=current_user.username, operation_name=request.form['name'],
                              create_time=datetime.now())
         db.session.add(spider_info)
         db.session.add(opara_log)
