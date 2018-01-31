@@ -2,7 +2,7 @@
 
 from flask import render_template, request, redirect, url_for, flash
 from app.taskMain import taskMain
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app.models import TaskInfo, OperaLog
 from app import db
 
@@ -14,6 +14,7 @@ import uuid
 
 
 @taskMain.route('/all_task', methods=['GET'])
+@login_required
 def all_task():
     # 所有计划任务
     task_info = TaskInfo.query.all()
@@ -26,6 +27,7 @@ def all_task():
 
 
 @taskMain.route('/effe_task', methods=['GET'])
+@login_required
 def effe_task():
     # 有效任务
     task_info = TaskInfo.query.filter_by(status='running').all()
@@ -38,6 +40,7 @@ def effe_task():
 
 
 @taskMain.route('/stoped_task', methods=['GET'])
+@login_required
 def stoped_task():
     # 已停止任务
     task_info = TaskInfo.query.filter_by(status='stop').all()
@@ -55,6 +58,7 @@ def myfunc(project, spider):
 
 
 @taskMain.route('/create_task', methods=['POST'])
+@login_required
 def create_task():
     # 创建任务
     try:
@@ -72,9 +76,9 @@ def create_task():
         flag = stask_obj.create_task(request.form['project'], request.form['spider'], 'start', request.form['dy_type'], **request.form)
         if flag:
             task_info = TaskInfo(name=request.form['name'], work_num=0, create_time=datetime.now(),
-                                 create_person='tangxl', status='Padding', introduce=request.form['introduce'])
+                                 create_person=current_user.username, status='Padding', introduce=request.form['introduce'])
             # 后面添加读取当前登录用户功能
-            opara_log = OperaLog(operation='create_task', person='txl', operation_name=request.form['name'],
+            opara_log = OperaLog(operation='create_task', person=current_user.username, operation_name=request.form['name'],
                                  create_time=datetime.now())
             db.session.add(task_info)
             db.session.add(opara_log)

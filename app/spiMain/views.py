@@ -6,7 +6,7 @@ from lxml import etree
 
 from flask import render_template, request, redirect, url_for, flash, current_app
 from app.spiMain import spiMain
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app import db
 
 from ..scdMain.spiderinfo import SpiderTask, SpiderInfo
@@ -14,6 +14,7 @@ from app.models import ScrapyProject, SpiderInfoDB
 
 
 @spiMain.route('/action_spider', methods=['POST'])
+@login_required
 def action_spider():
     # 开始爬虫
     stask_obj = SpiderTask()
@@ -38,6 +39,7 @@ def action_spider():
 
 
 @spiMain.route('/view_spider', methods=['POST'])
+@login_required
 def view_task():
     # 查看爬虫
     spider_obj = SpiderInfo()
@@ -46,6 +48,7 @@ def view_task():
 
 
 @spiMain.route('/project_base', methods=['GET'])
+@login_required
 def project_base():
     # 项目页面
     project_info = ScrapyProject.query.all()
@@ -54,10 +57,12 @@ def project_base():
         temp_data = {'project_name': project.name, 'spiders': project.spider_count, 'node_name': project.node_name,
                      'create_date': project.create_time, 'version': project.version, 'introduce': project.introduce}
         re_list.append(temp_data)
-    return render_template('apsForm/project_base.html', re_list=re_list)
+    return render_template('apsForm/project_base.html', re_list=re_list, user=current_user.username, email=current_user.email,
+                           level=current_user.level, counts=current_user.project_count, typ='项目')
 
 
 @spiMain.route('/spider_base', methods=['GET', 'POST'])
+@login_required
 def spider_base():
     # 爬虫页面
     spider_info = SpiderInfoDB.query.all()
@@ -72,10 +77,12 @@ def spider_base():
         re_list.append(temp_data)
     for p in project_info:
         project_list.append(p.name)
-    return render_template('apsForm/spider_base.html', re_list=re_list, project_list=project_list)
+    return render_template('apsForm/spider_base.html', re_list=re_list, project_list=project_list, user=current_user.username, email=current_user.email,
+                           level=current_user.level, counts=current_user.spider_count, typ='爬虫')
 
 
 @spiMain.route('/spider_run_base', methods=['GET'])
+@login_required
 def spider_run_base():
     # 运行中爬虫页面
     spider_info = SpiderInfoDB.query.filter_by(status='running').all()
@@ -89,10 +96,12 @@ def spider_run_base():
         re_list.append(temp_data)
     for p in project_info:
         project_list.append(p.name)
-    return render_template('apsForm/spider_base.html', re_list=re_list, project_list=project_list)
+    return render_template('apsForm/spider_base.html', re_list=re_list, project_list=project_list, user=current_user.username, email=current_user.email,
+                           level=current_user.level, counts=current_user.spider_count, typ='爬虫')
 
 
 @spiMain.route('/spider_pad_base', methods=['GET'])
+@login_required
 def spider_pad_base():
     # 待运行爬虫页面
     spider_info = SpiderInfoDB.query.filter_by(status='padding').all()
@@ -106,10 +115,12 @@ def spider_pad_base():
         re_list.append(temp_data)
     for p in project_info:
         project_list.append(p.name)
-    return render_template('apsForm/spider_base.html', re_list=re_list, project_list=project_list)
+    return render_template('apsForm/spider_base.html', re_list=re_list, project_list=project_list, user=current_user.username, email=current_user.email,
+                           level=current_user.level, counts=current_user.spider_count, typ='爬虫')
 
 
 @spiMain.route('/suc_task', methods=['GET'])
+@login_required
 def suc_task():
     # 已完成任务页面
     spiinfo_obj = SpiderInfo()
@@ -140,4 +151,9 @@ def suc_task():
                                 'runtime': (86400 - int(run_time.seconds)), 'finish': task['end_time'].split('.')[0], 'status': 'finished',
                                 'log': ''.join([current_app.config['SCRAPYD_URL'], 'logs/%s/%s/%s.log' % (k, task['spider'], task['id'])])})
 
-    return render_template('apsForm/suc_task.html', re_list=re_list)
+    return render_template('apsForm/suc_task.html', re_list=re_list, user=current_user.username, email=current_user.email,
+                           level=current_user.level, counts=current_user.task_count, typ='任务')
+
+
+
+
