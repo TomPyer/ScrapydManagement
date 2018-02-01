@@ -23,7 +23,8 @@ def all_task():
         temp_data = {'task_name': task.name, 'work_num': task.work_num, 'create_date': task.create_time,
                      'create_pre': task.create_person, 'status': task.status, 'introduce': task.introduce}
         re_list.append(temp_data)
-    return render_template('apsForm/stoped_task.html', re_list=re_list)
+    return render_template('apsForm/stoped_task.html', re_list=re_list, user=current_user.username, email=current_user.email,
+                           level=current_user.level, counts=current_user.project_count, typ='计划任务')
 
 
 @taskMain.route('/effe_task', methods=['GET'])
@@ -36,7 +37,8 @@ def effe_task():
         temp_data = {'task_name': task.name, 'work_num': task.work_num, 'create_date': task.create_time,
                      'create_pre': task.create_person, 'status': task.status, 'introduce': task.introduce}
         re_list.append(temp_data)
-    return render_template('apsForm/stoped_task.html', re_list=re_list)
+    return render_template('apsForm/stoped_task.html', re_list=re_list, user=current_user.username, email=current_user.email,
+                           level=current_user.level, counts=current_user.project_count, typ='计划任务')
 
 
 @taskMain.route('/stoped_task', methods=['GET'])
@@ -49,12 +51,13 @@ def stoped_task():
         temp_data = {'task_name': task.name, 'work_num': task.work_num, 'create_date': task.create_time,
                      'create_pre': task.create_person, 'status': task.status, 'introduce': task.introduce}
         re_list.append(temp_data)
-    return render_template('apsForm/stoped_task.html', re_list=re_list)
+    return render_template('apsForm/stoped_task.html', re_list=re_list, user=current_user.username, email=current_user.email,
+                           level=current_user.level, counts=current_user.project_count, typ='计划任务')
 
 
 def myfunc(project, spider):
     from subprocess import Popen
-    Popen(['scrapy'], cwd='D:/work/scrapyProject/%s' % project ,shell=True)
+    Popen(['scrapy'], cwd='D:/work/scrapyProject/%s' % project, shell=True)
 
 
 @taskMain.route('/create_task', methods=['POST'])

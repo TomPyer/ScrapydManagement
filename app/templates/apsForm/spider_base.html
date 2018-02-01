@@ -20,7 +20,7 @@
               </thead>
             <tbody>
             {% for data in re_list %}
-                <tr>
+                <tr onclick="spider_click_to(this)">
                     <td>{{data['spider']}}</td>
                     <td>{{data['project']}}</td>
                     <td>{{data['node_name']}}</td>
@@ -28,6 +28,7 @@
                     <td>{{data['version']}}</td>
                     <td>{{data['status']}}</td>
                     <td>{{data['status_time(minu)']}}</td>
+                    <td id='sp_url' style="display:None;">{{data['spider_url']}}</td>
                     {% if data['status'] == 'stop' %}
                     <td><button class="btn btn-success btn-sm">启动</button></td>
                     {% else %}
@@ -90,5 +91,10 @@
         </div>
     </form>
 </section>
-
+<script>
+    function spider_click_to(obj) {
+        url = '/spiMain/write_spider';
+        window.location.href= url;
+    }
+</script>
 {% endblock %}

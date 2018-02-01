@@ -1,0 +1,10 @@
+{% extends "apsched.html" %}
+{% block apsched_form %}
+<section>
+    <div class="col-lg-7" style="padding-top: 50px; border: 1px;">
+        {% for line in file_body %}
+        <pre>{{line}}</pre>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
