@@ -73,7 +73,7 @@ def spider_base():
         spider_info = SpiderInfoDB.query.filter_by(project=request.args.get('project')).all()
     for spider in spider_info:
         temp_data = {'spider': spider.name, 'project': spider.project, 'node_name': '', 'create_date': spider.create_time,
-                   'version': spider.version, 'status': spider.status, 'status_time(minu)': spider.run_time}
+                   'version': spider.version, 'status': spider.status, 'status_time(minu)': spider.run_time, 'spider_url': spider.sp_url}
         re_list.append(temp_data)
     for p in project_info:
         project_list.append(p.name)
@@ -146,7 +146,7 @@ def suc_task():
         #                                         '/logs/%s/%s/%s.log' % (k, task['spider'], task['id'])])})
         for task in work_info['finished']:
             if task:
-                run_time = datetime.strptime(task['start_time'].split('.')[0], "%Y-%m-%d %H:%M:%S") - datetime.strptime(task['end_time'].split('.')[0], "%Y-%m-%d %H:%M:%S")
+                run_time = datetime.datetime.strptime(task['start_time'].split('.')[0], "%Y-%m-%d %H:%M:%S") - datetime.datetime.strptime(task['end_time'].split('.')[0], "%Y-%m-%d %H:%M:%S")
                 re_list.append({'project': k, 'spider': task['spider'], 'job': task['id'], 'start': task['start_time'].split('.')[0],
                                 'runtime': (86400 - int(run_time.seconds)), 'finish': task['end_time'].split('.')[0], 'status': 'finished',
                                 'log': ''.join([current_app.config['SCRAPYD_URL'], 'logs/%s/%s/%s.log' % (k, task['spider'], task['id'])])})
@@ -155,5 +155,26 @@ def suc_task():
                            level=current_user.level, counts=current_user.task_count, typ='任务')
 
 
+@spiMain.route('/write_spider', methods=['GET'])
+def selector():
+    # 解析页面
+    file_body = None
+    return render_template('apsForm/file_page.html', file_body=file_body)
 
 
+@spiMain.route('/get_rules', methods=['GET', 'POST'])
+def get_rules():
+    from flask import jsonify
+    re_list = []
+    for i in range(6):
+        temp_data = {'allowed_domains': 'www.baidu.com', 'start_url': 'www.baidu.com',
+                     'next_page': '//div[@class="questionsList"]', 'body1': '//div[@class="asdas123"]',
+                     'body2': '//div[@class="12lll"]',
+                     'body3': '//table[class="lkppo"]'}
+        re_list.append(temp_data)
+    return jsonify(re_list)
+
+
+@spiMain.route('/modify_rules', methods=['POST'])
+def modify_rules():
+    pass

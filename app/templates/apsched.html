@@ -253,6 +253,7 @@
         method:'POST',
         dataType:'json',
         contentType: "application/x-www-form-urlencoded",
+        url:'/spiMain/get_rules',
         cache: false,
         striped: true,                              //是否显示行间隔色
         sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
@@ -268,6 +269,10 @@
         exportTypes:[ 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'],  //导出文件类型
         onEditableSave: function (field, row, oldValue, $el) {
             $.ajax({
+                type:'post',
+                url:'/spiMain/modify_rules',
+                data:row,
+                dataType:'JSON',
                 success: function (data, status) {
                     if (status == "success") {
                         alert("编辑成功");
@@ -290,68 +295,12 @@
               $el.closest('tr').next().find('.editable').editable('show');
           }
       },
-        data: [{
-            id: 1,
-            name: '张三',
-            sex: '男',
-            time: '2017-08-09'
-        }, {
-            id: 2,
-            name: '王五',
-            sex: '女',
-            time: '2017-08-09'
-        }, {
-            id: 3,
-            name: '李四',
-            sex: '男',
-            time: '2017-08-09'
-        }, {
-            id: 4,
-            name: '杨朝来',
-            sex: '男',
-            time: '2017-08-09'
-        }, {
-            id: 5,
-            name: '蒋平',
-            sex: '男',
-            time: '2017-08-09'
-        }, {
-            id: 6,
-            name: '唐灿华',
-            sex: '男',
-            time: '2017-08-09'
-        }, {
-            id: 7,
-            name: '马达',
-            sex: '男',
-            time: '2017-08-09'
-        }, {
-            id: 8,
-            name: '赵小雪',
-            sex: '女',
-            time: '2017-08-09'
-        }, {
-            id: 9,
-            name: '薛文泉',
-            sex: '男',
-            time: '2017-08-09'
-        }, {
-            id: 10,
-            name: '丁建',
-            sex: '男',
-            time: '2017-08-09'
-        }, {
-            id: 11,
-            name: '王丽',
-            sex: '女',
-            time: '2017-08-09'
-        }],
         columns: [{
             field: 'id',
             title: '序号'
         }, {
-            field: 'name',
-            title: '姓名',
+            field: 'allowed_domains',
+            title: '限定域名',
             editable: {
                 type: 'text',
                 validate: function (value) {
@@ -361,8 +310,8 @@
                 }
             }
         }, {
-            field: 'sex',
-            title: '性别',
+            field: 'start_url',
+            title: '起始url',
             editable: {
                 type: 'select',
                 pk: 1,
@@ -371,22 +320,22 @@
                     {value: 2, text: '女'},
                 ],
                 noeditFormatter: function (value,row,index) {
-                    var result={filed:"sex",value:value,class:"badge",style:"background:#333;padding:5px 10px;"};
+                    var result={filed:"start_url",value:value,class:"badge",style:"background:#333;padding:5px 10px;"};
                     return result;
                 }
             }
         },  {
-            field: 'time',
-            title: '时间',
+            field: 'next_page',
+            title: '下一页规则',
             editable: {
-                type: 'date',
+                type: 'text',
                 format: 'yyyy-mm-dd',
                 viewformat: 'yyyy-mm-dd',
                 datepicker: {
                     weekStart: 1
                 },
                 noeditFormatter: function (value,row,index) {
-                    var result={filed:"time",value:value,class:"badge",style:"background:#333;padding:5px 10px;"};
+                    var result={filed:"next_page",value:value,class:"badge",style:"background:#333;padding:5px 10px;"};
                     return result;
                 }
             }
