@@ -20,7 +20,7 @@
               </thead>
             <tbody>
             {% for data in re_list %}
-                <tr onclick="spider_click_to(this)">
+                <tr data-toggle="modal" data-target="#setSpider">
                     <td>{{data['spider']}}</td>
                     <td>{{data['project']}}</td>
                     <td>{{data['node_name']}}</td>
@@ -90,11 +90,74 @@
             </div><!-- /.modal -->
         </div>
     </form>
+    <form class="form-horizontal" role="form" method="post" action="/spiMain/set_spider">
+        <div class="modal fade" id="setSpider" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="setSpiderhead">
+                            定义爬虫规则
+                        </h4>
+                    </div>
+                    <div class="modal-body" id="spider_modal_body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" onclick="addLabel(this)">增加内容</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            提交
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div>
+        </div><!-- /.modal -->
+    </form>
 </section>
-<script>
-    function spider_click_to(obj) {
-        url = '/spiMain/write_spider';
-        window.location.href= url;
-    }
-</script>
+
 {% endblock %}
+
+<div class="form-group">
+                            <!--<label for="allowed_domains" class="col-sm-2 control-label">限定域名</label>-->
+                            <!--<div class="col-sm-10">-->
+                              <!--<input type="url" class="form-control" id="allowed_domains" placeholder="限定域名,不限定则填0">-->
+                            <!--</div>-->
+                          <!--</div><div class="form-group">-->
+                            <!--<label for="start_url" class="col-sm-2 control-label">起始url</label>-->
+                            <!--<div class="col-sm-10">-->
+                              <!--<input type="url" class="form-control" id="start_url" placeholder="起始url">-->
+                            <!--</div>-->
+                          <!--</div><div class="form-group">-->
+                            <!--<label for="next_page" class="col-sm-2 control-label">下页规则</label>-->
+                            <!--<div class="col-sm-10">-->
+                              <!--<input type="text" class="form-control" id="next_page" placeholder="下一页规则,没有则不填">-->
+                            <!--</div>-->
+                          <!--</div>-->
+                          <!--<div class="form-group">-->
+                            <!--<label for="body_url_1" class="col-sm-2 control-label">内容url</label>-->
+                            <!--<div class="col-sm-10">-->
+                              <!--<input type="text" class="form-control" id="body_url_1" placeholder="内容页面url(起始url和获取内容url不同时填写)">-->
+                            <!--</div>-->
+                          <!--</div>-->
+                          <!--<div class="form-group">-->
+                            <!--<label for="body1" class="col-sm-2 control-label">内容规则</label>-->
+                            <!--<div class="col-sm-10">-->
+                              <!--<input type="text" class="form-control" id="body1" placeholder="需要获取的内容-匹配规则">-->
+                            <!--</div>-->
+                          <!--</div>-->
+                          <!--<div class="form-group">-->
+                            <!--<label for="body2" class="col-sm-2 control-label">内容规则</label>-->
+                            <!--<div class="col-sm-10">-->
+                              <!--<input type="text" class="form-control" id="body2" placeholder="需要获取的内容-匹配规则">-->
+                            <!--</div>-->
+                          <!--</div>-->
+                          <!--<div class="form-group">-->
+                            <!--<label for="body3" class="col-sm-2 control-label">内容规则</label>-->
+                            <!--<div class="col-sm-10">-->
+                              <!--<input type="text" class="form-control" id="body3" placeholder="需要获取的内容-匹配规则">-->
+                            <!--</div>-->
+                          <!--</div>-->

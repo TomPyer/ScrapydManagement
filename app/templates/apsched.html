@@ -15,19 +15,29 @@
     <link rel="stylesheet" href="../static/css/ionicons.min.css">
     <link rel="stylesheet" href="../static/css/animate.css">
     <link rel="stylesheet" href="../static/css/responsive.css">
-      <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+    <link rel="stylesheet" href="../static/bootstrap-table/bootstrap-table.min.css">
 
 
     <!-- Js -->
     <script src="../static/js/vendor/modernizr-2.6.2.min.js"></script>
-    <script src="../static/js/vendor/jquery-1.10.2.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../static/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+    <script src="../static/js/vendor/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../static/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="../static/js/bootstrap.min.js"></script>
     <script src="../static/js/owl.carousel.min.js"></script>
     <script src="../static/js/min/waypoints.min.js"></script>
     <script src="../static/js/jquery.counterup.js"></script>
     <script src="../static/js/plugins.js"></script>
     <script src="../static/js/main.js"></script>
+
+
+    <script src="../static/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="../static/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="../static/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+      <link rel="stylesheet" href="../static/bootstrap3-editable/css/bootstrap-editable.css">
+      <script src="../static/bootstrap-table/extensions/editable/bootstrap-table-editable.min.js"></script>
   </head>
   <body>
 
@@ -70,7 +80,6 @@
     </div>
   </header><!-- header close -->
 
-    </section>
     <section id="work-table" style="padding-top: 40px">
         <div class="container-fluid">
             <div class="row-fluid">
@@ -198,5 +207,190 @@
         window.location.reload()
       });
     });
+</script>
+<script>
+//    模态框位置调整
+    function centerModals() {
+    　　$('#setSpider').each(function(i) {
+    　　　　var $clone = $(this).clone().css('display','block').appendTo('body');
+    　　　　var top = Math.round(($clone.height() - $clone.find('.modal-content').height())/3);
+    　　　　top = top > 0 ? top : 0;
+    　　　　$clone.remove();
+    　　　　$(this).find('.modal-content').css("margin-top", top);
+    　　});
+    };
+    function centerModals2() {
+    　　$('#myModal').each(function(i) {
+    　　　　var $clone = $(this).clone().css('display','block').appendTo('body');
+    　　　　var top = Math.round(($clone.height() - $clone.find('.modal-content').height()) / 3);
+    　　　　top = top > 0 ? top : 0;
+    　　　　$clone.remove();
+    　　　　$(this).find('.modal-content').css("margin-top", top);
+    　　});
+    }
+    $('#setSpider').on('show.bs.modal', centerModals);
+    $('#myModal').on('show.bs.modal', centerModals2);
+    //禁用空白处点击关闭
+    $('#setSpider').modal({
+    backdrop: 'static',
+    keyboard: false,//禁止键盘
+    show:false
+    });
+    //页面大小变化是仍然保证模态框水平垂直居中
+    $(window).on('resize', centerModals);
+</script>
+<script>
+//    模态框动态添加输入框组
+    function addLabel(obj) {
+        $('#spider_modal_body').append("<div class='form-group'> <label for='body' class='col-sm-2 control-label'>内容规则</label> <div class='col-sm-10'> <input type='text' class='form-control' id='body' placeholder='需要获取的内容-匹配规则'>  </div>  </div>")
+    }
+</script>
+<script>
+//    可编辑表格初始化代码（测试阶段用）
+    $(function(){
+    //初始化表格
+    $('#subprocessTable').bootstrapTable({
+        method:'POST',
+        dataType:'json',
+        contentType: "application/x-www-form-urlencoded",
+        cache: false,
+        striped: true,                              //是否显示行间隔色
+        sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+        showColumns:true,
+        pagination:true,
+        minimumCountColumns:2,
+        pageNumber:1,                       //初始化加载第一页，默认第一页
+        pageSize: 10,                       //每页的记录行数（*）
+        pageList: [10, 15, 20, 25],        //可供选择的每页的行数（*）
+        uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+        showExport: true,
+        exportDataType: 'all',
+        exportTypes:[ 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'],  //导出文件类型
+        onEditableSave: function (field, row, oldValue, $el) {
+            $.ajax({
+                success: function (data, status) {
+                    if (status == "success") {
+                        alert("编辑成功");
+                    }
+                },
+                error: function () {
+                    alert("Error");
+                },
+                complete: function () {
+
+                }
+            });
+        },
+      onEditableHidden: function(field, row, $el, reason) { // 当编辑状态被隐藏时触发
+          if(reason === 'save') {
+              var $td = $el.closest('tr').children();
+          //    $td.eq(-1).html((row.price*row.number).toFixed(2));
+          //    $el.closest('tr').next().find('.editable').editable('show'); //编辑状态向下一行移动
+          } else if(reason === 'nochange') {
+              $el.closest('tr').next().find('.editable').editable('show');
+          }
+      },
+        data: [{
+            id: 1,
+            name: '张三',
+            sex: '男',
+            time: '2017-08-09'
+        }, {
+            id: 2,
+            name: '王五',
+            sex: '女',
+            time: '2017-08-09'
+        }, {
+            id: 3,
+            name: '李四',
+            sex: '男',
+            time: '2017-08-09'
+        }, {
+            id: 4,
+            name: '杨朝来',
+            sex: '男',
+            time: '2017-08-09'
+        }, {
+            id: 5,
+            name: '蒋平',
+            sex: '男',
+            time: '2017-08-09'
+        }, {
+            id: 6,
+            name: '唐灿华',
+            sex: '男',
+            time: '2017-08-09'
+        }, {
+            id: 7,
+            name: '马达',
+            sex: '男',
+            time: '2017-08-09'
+        }, {
+            id: 8,
+            name: '赵小雪',
+            sex: '女',
+            time: '2017-08-09'
+        }, {
+            id: 9,
+            name: '薛文泉',
+            sex: '男',
+            time: '2017-08-09'
+        }, {
+            id: 10,
+            name: '丁建',
+            sex: '男',
+            time: '2017-08-09'
+        }, {
+            id: 11,
+            name: '王丽',
+            sex: '女',
+            time: '2017-08-09'
+        }],
+        columns: [{
+            field: 'id',
+            title: '序号'
+        }, {
+            field: 'name',
+            title: '姓名',
+            editable: {
+                type: 'text',
+                validate: function (value) {
+                    if ($.trim(value) == '') {
+                        return '姓名不能为空!';
+                    }
+                }
+            }
+        }, {
+            field: 'sex',
+            title: '性别',
+            editable: {
+                type: 'select',
+                pk: 1,
+                source: [
+                    {value: 1, text: '男'},
+                    {value: 2, text: '女'},
+                ],
+                noeditFormatter: function (value,row,index) {
+                    var result={filed:"sex",value:value,class:"badge",style:"background:#333;padding:5px 10px;"};
+                    return result;
+                }
+            }
+        },  {
+            field: 'time',
+            title: '时间',
+            editable: {
+                type: 'date',
+                format: 'yyyy-mm-dd',
+                viewformat: 'yyyy-mm-dd',
+                datepicker: {
+                    weekStart: 1
+                },
+                noeditFormatter: function (value,row,index) {
+                    var result={filed:"time",value:value,class:"badge",style:"background:#333;padding:5px 10px;"};
+                    return result;
+                }
+            }
+        }]
+    });})
 </script>
 </html>
