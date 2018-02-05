@@ -129,8 +129,8 @@ def create_prject():
     # 创建项目
     if request.method == 'POST':
         try:
-            subprocess.Popen(['scrapy', 'startproject', request.form['name']], cwd='D:\work\scrapyProject')
-            dirs = 'D:\work\scrapyProject\%s\scrapy.cfg' % request.form['name']
+            subprocess.Popen(['scrapy', 'startproject', request.form['name']], cwd=current_app.config['SCRAPYCWD'])
+            dirs = current_app.config['SCRAPYDIRS'] % request.form['name']
             flag = True
             now = datetime.now()
             while flag:
@@ -143,7 +143,7 @@ def create_prject():
                 f.write('[deploy]\n')
                 f.write('url=http://localhost:6800/\n')
                 f.write('project=${project_name}\n')
-            project_dir = os.path.join('D:\work\scrapyProject', request.form['name'])
+            project_dir = os.path.join(current_app.config['SCRAPYCWD'], request.form['name'])
             if os.path.exists(project_dir):
                 subprocess.Popen(['scrapyd-deploy'], cwd=project_dir, shell=True)
 
@@ -151,6 +151,7 @@ def create_prject():
                                          create_time=datetime.now(), node_name='', create_person=current_user.username)
             opara_log = OperaLog(operation='create_project', person=current_user.username, operation_name=request.form['name'],
                                  create_time=datetime.now())
+            current_user.project_count += 1
             db.session.add(opara_log)
             db.session.add(project_info)
             db.session.commit()
@@ -168,17 +169,18 @@ def create_spider():
     import time
     try:
         subprocess.Popen(['scrapy', 'genspider', request.form['name'], request.form['website']],
-                         cwd='D:\work\scrapyProject\%s' % request.form['project'])
-        pat = os.path.join('D:\work\scrapyProject\%s\%s' % (request.form['project'],request.form['project']), 'spiders', request.form['name'])
+                         cwd=os.path.join(current_app.config['SCRAPYCWD'], request.form['project']))
+        pat = os.path.join(current_app.config['SCRAPYCWD'], request.form['project'], request.form['project'], 'spiders', request.form['name'])
         if not os.path.join(pat):
             time.sleep(3)
-        subprocess.Popen(['scrapyd-deploy'], cwd='D:\work\scrapyProject\%s' % request.form['project'], shell=True)
+        subprocess.Popen(['scrapyd-deploy'], cwd='\\'.join([current_app.config['SCRAPYCWD'], request.form['project']]), shell=True)
         spider_info = SpiderInfoDB(name=request.form['name'], sp_url=request.form['website'], run_count=0, item_count=0,
                                    url_count=0, introduce=request.form['introduce'], project=request.form['project'],
                                    create_time=datetime.now(), version='1.0', status='stop', create_person=current_user.username)
         # 后面添加读取当前登录用户功能
         opara_log = OperaLog(operation='create_spider', person=current_user.username, operation_name=request.form['name'],
                              create_time=datetime.now())
+        current_user.spider_count += 1
         db.session.add(spider_info)
         db.session.add(opara_log)
         db.session.commit()
@@ -187,5 +189,6 @@ def create_spider():
         flash('请填写完整信息...')
     except Exception as e:
         _ = e
+        traceback.print_exc()
         flash(e)
     return redirect(url_for('spiMain.spider_base'))

@@ -44,7 +44,8 @@ class DevelopmentConfig(Config):
     REDIS_POST = '6379'
 
     # scrapy目录配置
-    SCRAPYPWD = 'D:\work\scrapyPython3'
+    SCRAPYCWD = 'D:\\tangxuelin\\projectManager'
+    SCRAPYDIRS = 'D:\\tangxuelin\\projectManager\%s\scrapy.cfg'
 
 
 class TestingConfig(Config):
